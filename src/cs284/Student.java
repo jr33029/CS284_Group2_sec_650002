@@ -1,31 +1,43 @@
 package cs284;
 
 public class Student {
-	private String name, lastname,grade;
+	
+	private String name, type,grade;
 	private boolean status;
 	String code;
 	private int totalPoint;
-	public Student(String code,String name,String lastname) {
+	
+	public Student(String code,String name) {
 		// TODO Auto-generated constructor stub
 		this.code = code;
 		this.name = name;
-		this.lastname = lastname;
+		this.type = "N/A";
 		status = true;
 		totalPoint = 0;
 	}
-	public Student(String code,String name,String lastname,int totalPoint,boolean status) {
+	
+	
+	public Student(String code,String name,String type) {
 		// TODO Auto-generated constructor stub
 		this.code = code;
 		this.name = name;
-		this.lastname = lastname;
+		this.type = type;
+		status = true;
+		totalPoint = 0;
+	}
+	public Student(String code,String name,String type,int totalPoint,boolean status) {
+		// TODO Auto-generated constructor stub
+		this.code = code;
+		this.name = name;
+		this.type = type;
 		this.status = status;
 		this.totalPoint = 0;
 	}
-	public Student(String code,String name,String lastname,int totalPoint,boolean status,String grade) {
+	public Student(String code,String name,String type,int totalPoint,boolean status,String grade) {
 		// TODO Auto-generated constructor stub
 		this.code = code;
 		this.name = name;
-		this.lastname = lastname;
+		this.type = type;
 		this.status = status;
 		this.totalPoint = 0;
 		this.grade = grade;
@@ -33,8 +45,8 @@ public class Student {
 	public String getName() {
 		return name;
 	}
-	public String getLastname() {
-		return lastname;
+	public String getType() {
+		return type;
 	}
 	public boolean isStatus() {
 		return status;

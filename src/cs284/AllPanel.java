@@ -5,11 +5,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -22,22 +20,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.TableColumn;
-
 import jxl.Sheet;
 import jxl.Workbook;
-import jxl.read.biff.File;
 
 public class AllPanel {
 	FileWriter write = null;
 	BufferedWriter print = null;
-	
-	
+
 	public ArrayList<Student> getStudentArray() {
 		return StudentArray;
 	}
 
-	//Array of Student
+	// Array of Student
 	private ArrayList<Student> StudentArray = new ArrayList<>();
 
 	public JPanel CoursePanel() {
@@ -119,7 +113,7 @@ public class AllPanel {
 												print.write("D+ " + text.get(5).getText() + "\n");
 												print.write("D " + text.get(6).getText() + "\n");
 												print.write("F " + text.get(7).getText());
-												print.close(); 
+												print.close();
 												write.close();
 											} catch (IOException e1) {
 												// TODO Auto-generated catch
@@ -138,147 +132,135 @@ public class AllPanel {
 		return course;
 	}
 
-	public JPanel StudentPanel() {
-		
+	public JPanel StudentPanel(File selectedFile, ArrayList<Student> arrayList) {
+		JButton ok = new JButton("Confirm");
 		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
 		
 		
-		
-		JFileChooser chooser = new JFileChooser();
+		String[][] data = new String[arrayList.size()][100];
+		String[] head = new String[5];
+		head[0] = "รหัสนักศึกษา";
+		head[1] = "ชื่อ-นามสกุล";
+		head[2] = "ประเภท";
+		head[3] = "สถานะการเรียน";
+		head[4] = "คะแนน";
+		for (int i = 0; i < arrayList.size(); i++) {
+			data[i][0] = arrayList.get(i).getCode();
+			data[i][1] = arrayList.get(i).getName();
+			data[i][2] = arrayList.get(i).getType();
+			data[i][3] = "ยังเรียนอยู่";
+			data[i][4] = arrayList.get(i).getTotalPoint()+"";
+		}
+		JTable table = new JTable(data, head);
+		JScrollPane scroll = new JScrollPane(table);
+		panel.add(scroll);
+		JPanel menubot = new JPanel();
+		JPanel bot = new JPanel();
+		bot.setLayout(new GridLayout(2, 1));
+		menubot.setLayout(new GridLayout(2, 2));
+		JLabel sayV = new JLabel("Score Value");
+		JLabel sayM = new JLabel("Max Score");
+		JTextField getV = new JTextField(10);
+		JTextField getM = new JTextField(10);
+		menubot.add(sayV);
+		menubot.add(sayM);
+		menubot.add(getV);
+		menubot.add(getM);
+		bot.add(menubot);
+		bot.add(ok);
+		panel.add(bot, BorderLayout.SOUTH);
+		ok.addActionListener(new ActionListener() {
 
-		try {
-
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			chooser.setFileFilter(new FileNameExtensionFilter("Excel 97-2003 Workbook (*.xls)", "xls"));
-
-			int opt = chooser.showOpenDialog(null);
-
-			while (opt == JFileChooser.CANCEL_OPTION || opt == JFileChooser.ERROR_OPTION) {
-				JOptionPane.showMessageDialog(null, "Please Select file");
-				opt = chooser.showOpenDialog(null);
-			}
-
-			// chooser.showSaveDialog(null);
-
-			String fName = chooser.getSelectedFile().getPath();
-			System.out.println(fName);
-			Workbook workbook = Workbook.getWorkbook(new java.io.File(fName));
-
-			Sheet ws1 = workbook.getSheet(0);
-
-			int numOfColumn = ws1.getColumns();
-			int numOfRow = ws1.getRows();
-
-			for (int i = 0; i < numOfRow; i++) {
-				for (int j = 0; j < numOfColumn; j++) {
-					// getCell(column, row)
-					System.out.print(ws1.getCell(j, i).getContents() + " ");
-					StudentArray.add(new Student(ws1.getCell(j, i).getContents(), ws1.getCell(j, i).getContents(), ws1.getCell(j, i).getContents()));
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JFrame textf = new JFrame();
+				JTextField textn = new JTextField(10);
+				textf.add(textf);
+				try {
+					write = new FileWriter(textn.getText() + ".txt");
+					print = new BufferedWriter(write);
+					print.write("");
+					print.close();
+					write.close();
+					textf.pack();
+					textf.setVisible(true);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch
+					e1.printStackTrace();
 				}
-				System.out.println();
 			}
-
-			workbook.close();
-			System.out.println("Read Sucess");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		
-		
-		
-		
-		String[][] data = new  String[4][StudentArray.size()];
-		
-		
-		/* = { { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" } };*/
-				
-		
-		
-		String[] head = new String[4];
-		
-		head[0] = "Student ID";
-		head[1] = "Name";
-		head[2] = "LastName";
-		head[3] = "Point";
-			
-		
-		
-		
-		for (int i = 0; i < StudentArray.size(); i++) {
-			data[0][i] = StudentArray.get(i).getCode();
-			data[1][i]= StudentArray.get(i).getName();
-			data[2][i]= StudentArray.get(i).getLastname();
-			data[3][i]= "0";
-			//data[2][10]="jjj";
-		}
-		
-		
-		JTable table = new JTable(data, head);
-		
-		JScrollPane scroll = new JScrollPane(table);
-		panel.add(scroll);
-		System.out.println(table.getModel().getValueAt(0, 3));
+		});
+		// System.out.println(table.getModel().getValueAt(0, 3));
 		return panel;
 	}
 
-	public JPanel StudentPanelTotal() {
+	public JPanel StudentPanelTotal(File selectedFile, ArrayList<Student> arrayList) {
 		JPanel panel = new JPanel();
-		String[][] data = { { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
-				{ "5909650714", "Chalit", "Nattayawichit", "0" } };
-		String[] head = { "Student ID", "Name", "LastName", "TotalPoint" };
+
+		//String[] head = { "Student ID", "Name", "LastName", "TotalPoint" };
+		// JTable table = new JTable(data, head);
+		// JScrollPane scroll = new JScrollPane(table);
+		// panel.add(scroll);
+		// table.setEnabled(false);
+		
+		
+		
+		String[][] data = new String[arrayList.size()][100];
+		String[] head = new String[5];
+		head[0] = "รหัสนักศึกษา";
+		head[1] = "ชื่อ-นามสกุล";
+		head[2] = "ประเภท";
+		head[3] = "สถานะการเรียน";
+		head[4] = "คะแนน";
+		for (int i = 0; i < arrayList.size(); i++) {
+			data[i][0] = arrayList.get(i).getCode();
+			data[i][1] = arrayList.get(i).getName();
+			data[i][2] = arrayList.get(i).getType();
+			data[i][3] = "ยังเรียนอยู่";
+			data[i][4] = arrayList.get(i).getTotalPoint()+"";
+		}
 		JTable table = new JTable(data, head);
 		JScrollPane scroll = new JScrollPane(table);
 		panel.add(scroll);
-		table.setEnabled(false);
 		return panel;
 	}
-
+	
+	public JPanel GraderPanel(File selectedFile, ArrayList<Student> arrayList){
+		JPanel panel = new JPanel();
+		//String[] head = { "Student ID", "Name", "LastName", "TotalPoint" };
+		//JTable table = new JTable(data, head);
+		//JScrollPane scroll = new JScrollPane(table);
+		//panel.add(scroll);
+		//table.setEnabled(false);
+		
+		
+		
+		
+		
+		String[][] data = new String[arrayList.size()][100];
+		String[] head = new String[5];
+		head[0] = "รหัสนักศึกษา";
+		head[1] = "ชื่อ-นามสกุล";
+		head[2] = "ประเภท";
+		head[3] = "สถานะการเรียน";
+		head[4] = "คะแนน";
+		for (int i = 0; i < arrayList.size(); i++) {
+			data[i][0] = arrayList.get(i).getCode();
+			data[i][1] = arrayList.get(i).getName();
+			data[i][2] = arrayList.get(i).getType();
+			data[i][3] = "0";
+		}
+		JTable table = new JTable(data, head);
+		JScrollPane scroll = new JScrollPane(table);
+		panel.add(scroll);
+		return panel;
+	}
 	public static void main(String[] args) {
 		AllPanel p = new AllPanel();
 		JFrame f = new JFrame();
-		f.add(p.StudentPanel());
+		//f.add(p.StudentPanel());
 		f.pack();
 		f.setDefaultCloseOperation(f.EXIT_ON_CLOSE);
 		f.setVisible(true);
