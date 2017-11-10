@@ -137,7 +137,7 @@ public class AllPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		
-		
+		//test
 		String[][] data = new String[arrayList.size()][100];
 		String[] head = new String[5];
 		head[0] = "รหัสนักศึกษา";
@@ -154,6 +154,8 @@ public class AllPanel {
 		}
 		JTable table = new JTable(data, head);
 		JScrollPane scroll = new JScrollPane(table);
+		
+		table.getColumnModel().getColumn(1).setPreferredWidth(200);
 		panel.add(scroll);
 		JPanel menubot = new JPanel();
 		JPanel bot = new JPanel();
@@ -240,17 +242,18 @@ public class AllPanel {
 		
 		
 		String[][] data = new String[arrayList.size()][100];
-		String[] head = new String[5];
+		String[] head = new String[4];
 		head[0] = "รหัสนักศึกษา";
 		head[1] = "ชื่อ-นามสกุล";
 		head[2] = "ประเภท";
-		head[3] = "สถานะการเรียน";
-		head[4] = "คะแนน";
+		head[3] = "เกรด";
+		
 		for (int i = 0; i < arrayList.size(); i++) {
 			data[i][0] = arrayList.get(i).getCode();
 			data[i][1] = arrayList.get(i).getName();
 			data[i][2] = arrayList.get(i).getType();
-			data[i][3] = "0";
+			data[i][3] = "";
+			
 		}
 		JTable table = new JTable(data, head);
 		JScrollPane scroll = new JScrollPane(table);
