@@ -5,6 +5,12 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -21,34 +27,38 @@ import jxl.Sheet;
 import jxl.Workbook;
 
 public class CourseFrame extends JFrame {
+
 	private JButton course, addraw, netscore, grade;
 	private JLabel head;
 	private AllPanel panel;
-	
-	private JMenuBar bar= new JMenuBar();
+
+	private JMenuBar bar = new JMenuBar();
 	private JMenu fileMenu = new JMenu("File");
+
+	private JMenuItem openMenu = new JMenuItem("Open");
+	private JMenuItem saveMenu = new JMenuItem("Save");
 	private JMenuItem importMenu = new JMenuItem("import xls File");
-	
+
 	private File selectedFile;
 	private JLabel selectFileLabel = new JLabel("No File");
-	
+
 	private BorderLayout bl = new BorderLayout();
 
 	public ArrayList<Student> getStudentArray() {
-		return StudentArray;
+		return studentArray;
 	}
 
 	// Array of Student
-	private ArrayList<Student> StudentArray = new ArrayList<>();
+	private ArrayList<Student> studentArray = new ArrayList<>();
 
 	public CourseFrame() {
 		// TODO Auto-generated constructor stub
 		JFrame f1 = new JFrame();
 		f1.setLayout(bl);
-		f1.add(selectFileLabel ,BorderLayout.SOUTH);
-		
+		f1.add(selectFileLabel, BorderLayout.SOUTH);
+
 		importMenu.addActionListener(new ActionListener() {
-			//test
+			// test
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -57,49 +67,97 @@ public class CourseFrame extends JFrame {
 					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 					chooser.setFileFilter(new FileNameExtensionFilter("Excel File (*.xls)", "xls"));
 					int opt = chooser.showOpenDialog(null);
-					/*while (opt == JFileChooser.CANCEL_OPTION || opt == JFileChooser.ERROR_OPTION) {
-						JOptionPane.showMessageDialog(null, "Please Select file");
-						opt = chooser.showOpenDialog(null);
-					}*/
-					String fName = chooser.getSelectedFile().getPath();
-					
-					selectedFile = new File(fName);
-					selectFileLabel.setText("File Name: "+selectedFile.getName());
-					System.out.println("j");
-					Workbook workbook = Workbook.getWorkbook(new java.io.File(fName));
-					Sheet ws1 = workbook.getSheet(0);
-					
-					
-					int numOfColumn = ws1.getColumns();
-					int numOfRow = ws1.getRows();                
-					for (int i = 7; i < numOfRow; i++) {
-						StudentArray.add(new Student(ws1.getCell(1, i).getContents(), ws1.getCell(2, i).getContents() , ws1.getCell(3, i).getContents()));
-						System.out.println();
+					/*
+					 * while (opt == JFileChooser.CANCEL_OPTION || opt ==
+					 * JFileChooser.ERROR_OPTION) {
+					 * JOptionPane.showMessageDialog(null,
+					 * "Please Select file"); opt =
+					 * chooser.showOpenDialog(null); }
+					 */
+
+					if (opt == JFileChooser.APPROVE_OPTION) {
+						String fName = chooser.getSelectedFile().getPath();
+						selectedFile = new File(fName);
+						selectFileLabel.setText("File Name: " + selectedFile.getName());
+						System.out.println("j");
+						Workbook workbook = Workbook.getWorkbook(new java.io.File(fName));
+						Sheet ws1 = workbook.getSheet(0);
+						System.out.println("Read Sucess");
+						int numOfColumn = ws1.getColumns();
+						int numOfRow = ws1.getRows();
+						for (int i = 7; i < numOfRow; i++) {
+							studentArray.add(new Student(ws1.getCell(1, i).getContents(),
+									ws1.getCell(2, i).getContents(), ws1.getCell(3, i).getContents()));
+							System.out.println();
+						}
+						workbook.close();
 					}
-					workbook.close();
-					System.out.println("Read Sucess");
 				} catch (Exception ex) {
 					// TODO Auto-generated catch block
 					ex.printStackTrace();
 				}
-				
-				
 			}
 		});
-		
-		
-		
+
+		openMenu.addActionListener(new ActionListener() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JFileChooser openChooser = new JFileChooser();
+				int opt = openChooser.showOpenDialog(null);
+				if (opt == JFileChooser.APPROVE_OPTION) {
+					try {
+						ObjectInputStream os = new ObjectInputStream(
+								new FileInputStream(openChooser.getSelectedFile()));
+						studentArray = (ArrayList<Student>) os.readObject();
+						System.out.println(studentArray);
+					} catch (IOException | ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+
+		saveMenu.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JFileChooser saveChooser = new JFileChooser();
+
+				int opt = saveChooser.showSaveDialog(null);
+				if (opt == JFileChooser.APPROVE_OPTION) {
+					try {
+
+						FileOutputStream fos = new FileOutputStream(saveChooser.getSelectedFile());
+						ObjectOutputStream os = new ObjectOutputStream(fos);
+						os.writeObject(studentArray);
+						os.close();
+						fos.close();
+
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
+			}
+		});
+
 		fileMenu.add(importMenu);
+		fileMenu.add(openMenu);
+		fileMenu.add(saveMenu);
 		bar.add(fileMenu);
 		f1.add(bar, BorderLayout.NORTH);
-		
 
 		JPanel west = new JPanel();
 		west.setLayout(new GridLayout(4, 1));
-		west.add(course = new JButton("Course"));
-		west.add(addraw = new JButton("Add Raw Score"));
-		west.add(netscore = new JButton("Net Score"));
-		west.add(grade = new JButton("Grade"));
+		west.add(course = new JButton("เกณฑ์การตัดเกรด"));
+		west.add(addraw = new JButton("คะแนนดิบ"));
+		west.add(netscore = new JButton("คะแนนสุทธิ"));
+		west.add(grade = new JButton("เกรด"));
 		f1.add(west, BorderLayout.WEST);
 		JPanel cen = new JPanel();
 		cen.add(head = new JLabel("Hello EveryOne"));
@@ -128,7 +186,7 @@ public class CourseFrame extends JFrame {
 				// TODO Auto-generated method stub
 				panel = new AllPanel();
 				cen.removeAll();
-				cen.add(panel.StudentPanel(selectedFile ,getStudentArray()));
+				cen.add(panel.StudentPanel(selectedFile, getStudentArray()));
 				f1.pack();
 			}
 		});
@@ -139,24 +197,23 @@ public class CourseFrame extends JFrame {
 				// TODO Auto-generated method stub
 				panel = new AllPanel();
 				cen.removeAll();
-				cen.add(panel.StudentPanelTotal(selectedFile ,getStudentArray()));
+				cen.add(panel.StudentPanelTotal(selectedFile, getStudentArray()));
 				f1.pack();
 			}
 		});
-		
+
 		grade.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				panel = new AllPanel();
 				cen.removeAll();
-				cen.add(panel.GraderPanel(selectedFile ,getStudentArray()));
+				cen.add(panel.GraderPanel(selectedFile, getStudentArray()));
 				f1.pack();
 			}
 		});
-		
-		
+
 	}
 
 	public static void main(String[] args) {
