@@ -164,12 +164,16 @@ public class AllPanel {
 		
 		FileReader fr;
 		 criteriaText ="";
+		 
 		try {
 			fr = new FileReader("Grader.txt");
 			BufferedReader br = new BufferedReader(fr);
 			
 			String tmp;
+			
 			while(( tmp =br.readLine()) != null){
+				//gradeString = tmp.split(" ");
+				
 				criteriaText += tmp+"   ";
 				
 			}
@@ -185,6 +189,11 @@ public class AllPanel {
 		
 		
 		gradeLabel.setText(criteriaText);
+		
+		for (int i = 0; i < text.size(); i++) {
+			
+			text.get(i).setText(null);;
+		}
 		
 		
 		JPanel subPanel = new JPanel();
