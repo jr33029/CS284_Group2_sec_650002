@@ -1,13 +1,7 @@
 package cs284;
 
-import java.io.Serializable;
-
-public class Student implements  Serializable{
+public class Student {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private String name, type,grade;
 	private boolean status;
 	String code;

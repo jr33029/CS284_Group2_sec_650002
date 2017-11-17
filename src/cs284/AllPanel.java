@@ -4,11 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +26,6 @@ import jxl.Workbook;
 public class AllPanel {
 	FileWriter write = null;
 	BufferedWriter print = null;
-	
 
 	public ArrayList<Student> getStudentArray() {
 		return StudentArray;
@@ -41,9 +37,6 @@ public class AllPanel {
 	public JPanel CoursePanel() {
 
 		ArrayList<JTextField> text = new ArrayList<>();
-		JLabel gradeLabel = new JLabel();
-		String criteriaText ="";
-		
 		for (int i = 0; i < 8; i++) {
 			text.add(new JTextField(2));
 		}
@@ -134,71 +127,8 @@ public class AllPanel {
 						}
 					}
 				}
-				
-				 
-				FileReader fr;
-				String criteriaText ="";
-				try {
-					fr = new FileReader("Grader.txt");
-					BufferedReader br = new BufferedReader(fr);
-					
-					String tmp;
-					while(( tmp =br.readLine()) != null){
-						criteriaText += tmp+"   ";
-						
-					}
-					
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				
-				
-				gradeLabel.setText(criteriaText);
 			}
 		});
-		
-		FileReader fr;
-		 criteriaText ="";
-		 
-		try {
-			fr = new FileReader("Grader.txt");
-			BufferedReader br = new BufferedReader(fr);
-			
-			String tmp;
-			
-			while(( tmp =br.readLine()) != null){
-				//gradeString = tmp.split(" ");
-				
-				criteriaText += tmp+"   ";
-				
-			}
-			
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		
-		
-		gradeLabel.setText(criteriaText);
-		
-		for (int i = 0; i < text.size(); i++) {
-			
-			text.get(i).setText(null);;
-		}
-		
-		
-		JPanel subPanel = new JPanel();
-		subPanel.add(gradeLabel);
-		course.add(subPanel,BorderLayout.BEFORE_FIRST_LINE);
 		return course;
 	}
 
@@ -231,8 +161,8 @@ public class AllPanel {
 		JPanel bot = new JPanel();
 		bot.setLayout(new GridLayout(2, 1));
 		menubot.setLayout(new GridLayout(2, 2));
-		JLabel sayV = new JLabel("ÊÑ´ÊèÇ¹¢Í§¤Ðá¹¹");
-		JLabel sayM = new JLabel("¤Ðá¹¹àµçÁ");
+		JLabel sayV = new JLabel("Score Value");
+		JLabel sayM = new JLabel("Max Score");
 		JTextField getV = new JTextField(10);
 		JTextField getM = new JTextField(10);
 		menubot.add(sayV);
@@ -244,6 +174,7 @@ public class AllPanel {
 		panel.add(bot, BorderLayout.SOUTH);
 		ok.addActionListener(new ActionListener() {
 
+<<<<<<< HEAD
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -262,9 +193,108 @@ public class AllPanel {
 					// TODO Auto-generated catch
 					e1.printStackTrace();
 				}
+=======
+		try {
+
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			chooser.setFileFilter(new FileNameExtensionFilter("Excel 97-2003 Workbook (*.xls)", "xls"));
+
+			int opt = chooser.showOpenDialog(null);
+
+			while (opt == JFileChooser.CANCEL_OPTION || opt == JFileChooser.ERROR_OPTION) {
+				JOptionPane.showMessageDialog(null, "Please Select file");
+				opt = chooser.showOpenDialog(null);
 			}
+
+			// chooser.showSaveDialog(null);
+
+			String fName = chooser.getSelectedFile().getPath();
+			System.out.println(fName);
+			Workbook workbook = Workbook.getWorkbook(new java.io.File(fName));
+
+			Sheet ws1 = workbook.getSheet(0);
+
+			int numOfColumn = ws1.getColumns();
+			int numOfRow = ws1.getRows();
+
+			for (int i = 0; i < numOfRow; i++) {
+				
+					// getCell(column, row)
+				//	System.out.print(ws1.getCell(j, i).getContents() + " ");
+					StudentArray.add(new Student(ws1.getCell(0, i).getContents(), ws1.getCell(1, i).getContents(), ws1.getCell(2, i).getContents()));
+				
+				System.out.println();
+>>>>>>> refs/remotes/origin/master
+			}
+<<<<<<< HEAD
 		});
 		// System.out.println(table.getModel().getValueAt(0, 3));
+=======
+
+			workbook.close();
+			System.out.println("Read Sucess");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
+		String[][] data = new  String[StudentArray.size()][4];
+		
+		
+		/* = { { "5909650706", "Chuthamas", "Thawechrat", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
+				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
+				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
+				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
+				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
+				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
+				{ "5909650706", "Chuthamas", "Thawechrat", "0" }, { "5909650714", "Chalit", "Nattayawichit", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" }, { "5909650706", "Chuthamas", "Thawechrat", "0" },
+				{ "5909650714", "Chalit", "Nattayawichit", "0" } };*/
+				
+		
+		
+		String[] head = new String[4];
+		
+		head[0] = "Student ID";
+		head[1] = "Name";
+		head[2] = "LastName";
+		head[3] = "Point";
+			
+		
+		
+		
+		for (int i = 0; i < StudentArray.size(); i++) {
+			data[i][0] = StudentArray.get(i).getCode();
+			data[i][1]= StudentArray.get(i).getName();
+			data[i][2]= StudentArray.get(i).getLastname();
+			data[i][3]= "0";
+			//data[2][10]="jjj";
+		}
+		
+		
+		JTable table = new JTable(data, head);
+		
+		JScrollPane scroll = new JScrollPane(table);
+		panel.add(scroll);
+		System.out.println(table.getModel().getValueAt(0, 3));
+>>>>>>> refs/remotes/origin/master
 		return panel;
 	}
 

@@ -14,7 +14,7 @@ public class Reader {
 		JFileChooser chooser = new JFileChooser();
 
 		try {
-
+			System.out.println("kliii");
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setFileFilter(new FileNameExtensionFilter("Excel 97-2003 Workbook (*.xls)", "xls"));
 

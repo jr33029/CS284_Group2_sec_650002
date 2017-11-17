@@ -9,8 +9,8 @@ public class testwritefile {
 	
 	BufferedWriter bw = null ;
 	FileWriter fw = null;
-	Student st1 = new Student(001, "moss", "esper");
-	
+	Student st1 = new Student("001", "moss", "esper");
+	//klpkp
 public testwritefile() throws IOException {
 	// TODO Auto-generated constructor stub
 	
