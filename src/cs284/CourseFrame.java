@@ -30,15 +30,18 @@ public class CourseFrame extends JFrame {
 	private JMenu fileMenu = new JMenu("File");
 	private JMenuItem item = new JMenuItem("Import Excel File");
 	private BorderLayout bl = new BorderLayout();
-	
+	private JMenu fileMenu2;
 	private JMenuBar bar= new JMenuBar();
-	private JMenu fileMenu = new JMenu("File");
+	
+        
 	private JMenuItem importMenu = new JMenuItem("import xls File");
 	
 	private File selectedFile;
 	private JLabel selectFileLabel = new JLabel("No File");
 	
-	private BorderLayout bl = new BorderLayout();
+	private BorderLayout bllayout;
+        
+        
 
 	public ArrayList<Student> getStudentArray() {
 		return StudentArray;
@@ -48,9 +51,12 @@ public class CourseFrame extends JFrame {
 	private ArrayList<Student> StudentArray = new ArrayList<>();
 
 	public CourseFrame() {
+        this.bllayout = new BorderLayout();
+        this.fileMenu2 = new JMenu("File");
+        
 		// TODO Auto-generated constructor stub
 		JFrame f1 = new JFrame();
-		f1.setLayout(bl);
+		f1.setLayout(bllayout);
 		f1.add(selectFileLabel ,BorderLayout.SOUTH);
 		
 		importMenu.addActionListener(new ActionListener() {
@@ -96,11 +102,10 @@ public class CourseFrame extends JFrame {
 		
 		
 		fileMenu.add(importMenu);
-		bar.add(fileMenu);
+		bar.add(fileMenu2);
 		f1.add(bar, BorderLayout.NORTH);
 		
-=======
->>>>>>> refs/remotes/origin/master
+
 
 		JPanel west = new JPanel();
 		west.setLayout(new GridLayout(4, 1));
