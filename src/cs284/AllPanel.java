@@ -1,6 +1,7 @@
 package cs284;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +10,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -22,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import jxl.Sheet;
 import jxl.Workbook;
+import jxl.read.biff.BiffException;
 
 public class AllPanel {
 	FileWriter write = null;
@@ -140,16 +144,16 @@ public class AllPanel {
 		//test
 		String[][] data = new String[arrayList.size()][100];
 		String[] head = new String[5];
-		head[0] = "ÃËÑÊ¹Ñ¡ÈÖ¡ÉÒ";
-		head[1] = "ª×èÍ-¹ÒÁÊ¡ØÅ";
-		head[2] = "»ÃĞàÀ·";
-		head[3] = "Ê¶Ò¹Ğ¡ÒÃàÃÕÂ¹";
-		head[4] = "¤Ğá¹¹";
+		head[0] = "à¸£à¸«à¸±à¸ªà¸™à¸±à¸à¸¨à¸¶à¸à¸©à¸²";
+		head[1] = "à¸Šà¸·à¹ˆà¸­-à¸™à¸²à¸¡à¸ªà¸à¸¸à¸¥";
+		head[2] = "à¸ à¸²à¸„à¸§à¸´à¸Šà¸²";
+		head[3] = "Ê¶Ò¹Ğ¡ï¿½ï¿½ï¿½ï¿½ï¿½Â¹";
+		head[4] = "ï¿½ï¿½á¹¹";
 		for (int i = 0; i < arrayList.size(); i++) {
 			data[i][0] = arrayList.get(i).getCode();
 			data[i][1] = arrayList.get(i).getName();
 			data[i][2] = arrayList.get(i).getType();
-			data[i][3] = "ÂÑ§àÃÕÂ¹ÍÂÙè";
+			data[i][3] = "ï¿½Ñ§ï¿½ï¿½ï¿½Â¹ï¿½ï¿½ï¿½ï¿½";
 			data[i][4] = arrayList.get(i).getTotalPoint()+"";
 		}
 		JTable table = new JTable(data, head);
@@ -174,7 +178,7 @@ public class AllPanel {
 		panel.add(bot, BorderLayout.SOUTH);
 		ok.addActionListener(new ActionListener() {
 
-<<<<<<< HEAD
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -193,9 +197,11 @@ public class AllPanel {
 					// TODO Auto-generated catch
 					e1.printStackTrace();
 				}
-=======
-		try {
+                                
+		try{
 
+                        JFileChooser chooser = new JFileChooser();
+                        
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setFileFilter(new FileNameExtensionFilter("Excel 97-2003 Workbook (*.xls)", "xls"));
 
@@ -224,19 +230,22 @@ public class AllPanel {
 					StudentArray.add(new Student(ws1.getCell(0, i).getContents(), ws1.getCell(1, i).getContents(), ws1.getCell(2, i).getContents()));
 				
 				System.out.println();
->>>>>>> refs/remotes/origin/master
-			}
-<<<<<<< HEAD
-		});
-		// System.out.println(table.getModel().getValueAt(0, 3));
-=======
 
-			workbook.close();
+			}
+                        
+                        workbook.close();
 			System.out.println("Read Sucess");
-		} catch (Exception e) {
+                        
+                        // System.out.println(table.getModel().getValueAt(0, 3));
+                    }catch (Exception ex) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			ex.printStackTrace();
+		}  
+		
+
+
+			
+		 
 		
 		
 		
@@ -270,8 +279,9 @@ public class AllPanel {
 				
 		
 		
-		String[] head = new String[4];
+		String head[] = new String[4];
 		
+                
 		head[0] = "Student ID";
 		head[1] = "Name";
 		head[2] = "LastName";
@@ -283,7 +293,7 @@ public class AllPanel {
 		for (int i = 0; i < StudentArray.size(); i++) {
 			data[i][0] = StudentArray.get(i).getCode();
 			data[i][1]= StudentArray.get(i).getName();
-			data[i][2]= StudentArray.get(i).getLastname();
+			data[i][2]= StudentArray.get(i).getTotalPoint()+"";
 			data[i][3]= "0";
 			//data[2][10]="jjj";
 		}
@@ -292,12 +302,21 @@ public class AllPanel {
 		JTable table = new JTable(data, head);
 		
 		JScrollPane scroll = new JScrollPane(table);
-		panel.add(scroll);
-		System.out.println(table.getModel().getValueAt(0, 3));
->>>>>>> refs/remotes/origin/master
-		return panel;
-	}
+                            Component add = panel.add(scroll);
+		//System.out.println(table.getModel().getValueAt(0, 3));
 
+		
+                
+                
+                        }
+                });
+                
+                
+                return panel;
+                
+        }
+
+                        
 	public JPanel StudentPanelTotal(File selectedFile, ArrayList<Student> arrayList) {
 		JPanel panel = new JPanel();
 
@@ -311,16 +330,16 @@ public class AllPanel {
 		
 		String[][] data = new String[arrayList.size()][100];
 		String[] head = new String[5];
-		head[0] = "ÃËÑÊ¹Ñ¡ÈÖ¡ÉÒ";
-		head[1] = "ª×èÍ-¹ÒÁÊ¡ØÅ";
-		head[2] = "»ÃĞàÀ·";
-		head[3] = "Ê¶Ò¹Ğ¡ÒÃàÃÕÂ¹";
-		head[4] = "¤Ğá¹¹";
+		head[0] = "ï¿½ï¿½ï¿½Ê¹Ñ¡ï¿½Ö¡ï¿½ï¿½";
+		head[1] = "ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½ï¿½Ê¡ï¿½ï¿½";
+		head[2] = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+		head[3] = "Ê¶Ò¹Ğ¡ï¿½ï¿½ï¿½ï¿½ï¿½Â¹";
+		head[4] = "ï¿½ï¿½á¹¹";
 		for (int i = 0; i < arrayList.size(); i++) {
 			data[i][0] = arrayList.get(i).getCode();
 			data[i][1] = arrayList.get(i).getName();
 			data[i][2] = arrayList.get(i).getType();
-			data[i][3] = "ÂÑ§àÃÕÂ¹ÍÂÙè";
+			data[i][3] = "ï¿½Ñ§ï¿½ï¿½ï¿½Â¹ï¿½ï¿½ï¿½ï¿½";
 			data[i][4] = arrayList.get(i).getTotalPoint()+"";
 		}
 		JTable table = new JTable(data, head);
@@ -343,10 +362,10 @@ public class AllPanel {
 		
 		String[][] data = new String[arrayList.size()][100];
 		String[] head = new String[4];
-		head[0] = "ÃËÑÊ¹Ñ¡ÈÖ¡ÉÒ";
-		head[1] = "ª×èÍ-¹ÒÁÊ¡ØÅ";
-		head[2] = "»ÃĞàÀ·";
-		head[3] = "à¡Ã´";
+		head[0] = "ï¿½ï¿½ï¿½Ê¹Ñ¡ï¿½Ö¡ï¿½ï¿½";
+		head[1] = "ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½ï¿½Ê¡ï¿½ï¿½";
+		head[2] = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+		head[3] = "ï¿½Ã´";
 		
 		for (int i = 0; i < arrayList.size(); i++) {
 			data[i][0] = arrayList.get(i).getCode();
