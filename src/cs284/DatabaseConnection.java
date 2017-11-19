@@ -1,20 +1,16 @@
 
 package cs284;
 
-import com.mysql.jdbc.PreparedStatement;
-import org.mariadb.jdbc.MariaDbConnection;
-import org.*;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLNonTransientConnectionException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.JOptionPane;
 
-
-import org.mariadb.jdbc.Driver;
+import org.mariadb.jdbc.MariaDbConnection;
 
 
 
@@ -27,8 +23,8 @@ public class DatabaseConnection {
     
     private String driver = "org.mariadb.jdbc.Driver";
     private String url = "jdbc:mariadb://http://mydpk.ddns.net:3307/pong284_CS284";
-    private String user = "pong284"; // ตามที่เครื่องของคุณตั้งค่าไว้
-    private String pass = "123456"; // ตามที่เครื่องของคุณตั้งค่าไว้
+    private String user = "pong284"; // เธ•เธฒเธกเธ—เธตเน�เน€เธ�เธฃเธทเน�เธญเธ�เธ�เธญเธ�เธ�เธธเธ“เธ•เธฑเน�เธ�เธ�เน�เธฒเน�เธงเน�
+    private String pass = "123456"; // เธ•เธฒเธกเธ—เธตเน�เน€เธ�เธฃเธทเน�เธญเธ�เธ�เธญเธ�เธ�เธธเธ“เธ•เธฑเน�เธ�เธ�เน�เธฒเน�เธงเน�
     
     
      private MariaDbConnection con = null;
@@ -45,7 +41,7 @@ public class DatabaseConnection {
             
             
            
-            System.out.println("เชื่อมต่อฐานข้อมูลสำเร็จ");
+            System.out.println("Connection Successed");
             
         } catch (ClassNotFoundException  ex) {
             
@@ -72,18 +68,62 @@ public class DatabaseConnection {
      
      
      
-     public void getID(){
+     public boolean login(String user , String password){
          String sql = "SELECT * FROM Userincourse";
         try {
             java.sql.PreparedStatement pstate = con.prepareStatement(sql);
             ResultSet data = pstate.executeQuery();
             
+            boolean userSuccess = false;
+            String successUser = null;
+            String successPW = null;
+            while(data.next()){
+                
+                if(data.getString("user").equals(user)){
+                    userSuccess = true;
+                    successUser = data.getString("user");
+                    successPW = data.getString("password");
+                    break;
+                }
+                    
+            }
+            
+            if(!userSuccess){
+                JOptionPane.showMessageDialog(null, "No user","Error", JOptionPane.ERROR_MESSAGE);
+            }else{
+                pstate = con.prepareStatement(sql);
+                data = pstate.executeQuery();
+                
+                boolean pwSuccess = false;
+               
+                 while(data.next()){
+                
+                     
+                    if(successPW.equals(password) && successPW !=null ){
+                        pwSuccess = true;
+
+                        return true;
+                    }
+
+                   
+                
+                    
+                 }
+                 
+                  if(!pwSuccess){
+                        JOptionPane.showMessageDialog(null, "Wrong Password”" ,"Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                
+            }
+                    
             
             
             
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return false;
      }
      
      
@@ -98,12 +138,12 @@ public class DatabaseConnection {
      }
      
        public static void main(String[] args) {
-        System.out.println("เริ่มต้นโปรแกรม.........");
+        System.out.println("เน€เธฃเธดเน�เธกเธ•เน�เธ�เน�เธ�เธฃเน�เธ�เธฃเธก.........");
         
         DatabaseConnection db = new DatabaseConnection();
               
         //db.registerID();
-        System.out.println("\nสิ้นสุดโปรแกรม.........");
+        System.out.println("\nเธชเธดเน�เธ�เธชเธธเธ”เน�เธ�เธฃเน�เธ�เธฃเธก.........");
 
     }
 

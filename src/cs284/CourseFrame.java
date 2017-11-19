@@ -1,7 +1,9 @@
 package cs284;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -42,6 +44,8 @@ public class CourseFrame extends JFrame {
 	private BorderLayout bllayout;
         
         
+        
+        
 
 	public ArrayList<Student> getStudentArray() {
 		return StudentArray;
@@ -53,6 +57,7 @@ public class CourseFrame extends JFrame {
 	public CourseFrame() {
         this.bllayout = new BorderLayout();
         this.fileMenu2 = new JMenu("File");
+           
         
 		// TODO Auto-generated constructor stub
 		JFrame f1 = new JFrame();
@@ -120,6 +125,7 @@ public class CourseFrame extends JFrame {
 		//import Excel File
 		item.addActionListener(new ActionListener() {
 			
+                    
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -176,8 +182,13 @@ public class CourseFrame extends JFrame {
 		
 		f1.add(cen);
 		f1.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                
+               
 		f1.setSize(600, 600);
+                
 		f1.setTitle("Hello CS284");
+                f1.setLocationRelativeTo(null);
+                    
 		f1.setVisible(true);
 		course.addActionListener(new ActionListener() {
 

@@ -18,7 +18,7 @@ public testwritefile() throws IOException {
 	//f = new File("test.txt");
 	
 	String x; 
-	x =String.format("%d %s %s \n", st1.getCode() , st1.getName(),st1.getLastname());
+	x =String.format("%d %s %s \n", st1.getCode() , st1.getName());
 
 	fw = new FileWriter("test.txt");
 	bw = new BufferedWriter(fw);

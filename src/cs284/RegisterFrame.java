@@ -244,13 +244,13 @@ public class RegisterFrame extends javax.swing.JFrame {
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
         // TODO add your handling code here:
         if(!(pwField.getText()).equals(confirmPWField.getText())){
-            JOptionPane.showMessageDialog(rootPane, "รหัสผ่านไม่ตรงกัน");
+            JOptionPane.showMessageDialog(rootPane, "password mismatch");
             return;
         }
         
         else if(usernameTF.getText().equals("") || pwField.getText().equals("") || firstNameTf.getText().equals("") || lastNameTF.getText().equals("") || courseTF.getText().equals("") || sectionTF.getText().equals("") ){
             
-            JOptionPane.showMessageDialog(rootPane, "กรุณาใส่ข้อมูลให้ครบทุกช่อง");
+            JOptionPane.showMessageDialog(rootPane, "can't use empty passwoord");
             return;
             
         }
