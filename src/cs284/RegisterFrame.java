@@ -245,10 +245,10 @@ public class RegisterFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(!(pwField.getText()).equals(confirmPWField.getText())){
             JOptionPane.showMessageDialog(rootPane, "password mismatch");
-            return;
+            return ;
         }
         
-        else if(usernameTF.getText().equals("") || pwField.getText().equals("") || firstNameTf.getText().equals("") || lastNameTF.getText().equals("") || courseTF.getText().equals("") || sectionTF.getText().equals("") ){
+        else if( pwField.getText().equals("")  ){
             
             JOptionPane.showMessageDialog(rootPane, "can't use empty passwoord");
             return;
@@ -257,9 +257,9 @@ public class RegisterFrame extends javax.swing.JFrame {
         
         
         DatabaseConnection db = new DatabaseConnection();
-        
+        boolean state = false;
         try {
-            db.registerID(usernameTF.getText(), pwField.getText(), firstNameTf.getText(), lastNameTF.getText(), courseTF.getText(), sectionTF.getText());
+          state =  db.registerID(usernameTF.getText(), pwField.getText(), firstNameTf.getText(), lastNameTF.getText(), courseTF.getText(), sectionTF.getText());
             
             
         } catch ( Exception ex) {
@@ -267,12 +267,12 @@ public class RegisterFrame extends javax.swing.JFrame {
           return;
         }
         
-        JOptionPane.showMessageDialog(null, "Register Successed\n Username: " +usernameTF.getText());
+        
         db.closeConncetion();
         
-        
+        if(state) {
         this.dispose();
-        
+        }
         
     }//GEN-LAST:event_registerBtnActionPerformed
 

@@ -23,20 +23,29 @@ import jxl.Sheet;
 import jxl.Workbook;
 
 public class CourseFrame extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JButton course, addraw, netscore, grade;
 	private JLabel head;
 	private AllPanel panel;
 
 	private Reader reader = new Reader();
+	
 	private JMenuBar mBar = new JMenuBar();
 	private JMenu fileMenu = new JMenu("File");
-	private JMenuItem item = new JMenuItem("Import Excel File");
+	private JMenuItem exportMenu = new JMenuItem("Export Excel(97-2003 *.xls) File");
+	private JMenuItem importMenu = new JMenuItem("Import Excel(97-2003 *.xls) File");
+	private JMenuItem openMenu  = new JMenuItem("Open");
+	private JMenuItem saveMenu  = new JMenuItem("Save As...");
+	
 	private BorderLayout bl = new BorderLayout();
-	private JMenu fileMenu2;
+	
 	private JMenuBar bar= new JMenuBar();
 	
         
-	private JMenuItem importMenu = new JMenuItem("import xls File");
+	
 	
 	private File selectedFile;
 	private JLabel selectFileLabel = new JLabel("No File");
@@ -56,7 +65,7 @@ public class CourseFrame extends JFrame {
 
 	public CourseFrame() {
         this.bllayout = new BorderLayout();
-        this.fileMenu2 = new JMenu("File");
+       
            
         
 		// TODO Auto-generated constructor stub
@@ -105,9 +114,12 @@ public class CourseFrame extends JFrame {
 		});
 		
 		
-		
+		fileMenu.add(openMenu);
+		fileMenu.add(saveMenu);
+		fileMenu.addSeparator();
 		fileMenu.add(importMenu);
-		bar.add(fileMenu2);
+		
+		bar.add(fileMenu);
 		f1.add(bar, BorderLayout.NORTH);
 		
 
@@ -123,13 +135,13 @@ public class CourseFrame extends JFrame {
 		cen.add(head = new JLabel("Hello EveryOne"));
 		
 		//import Excel File
-		item.addActionListener(new ActionListener() {
+		exportMenu.addActionListener(new ActionListener() {
 			
                     
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				JFileChooser chooser = new JFileChooser();
+			/*	JFileChooser chooser = new JFileChooser();
 
 				try {
 
@@ -169,17 +181,17 @@ public class CourseFrame extends JFrame {
 					// TODO Auto-generated catch block
 					ex.printStackTrace();
 				}
-				
+				*/
 			}
 		});
 		
 		
-		fileMenu.add(item);
+		fileMenu.add(exportMenu);
 		mBar.add(fileMenu);
 		f1.add(mBar,BorderLayout.NORTH);
 		
 		
-		
+
 		f1.add(cen);
 		f1.setDefaultCloseOperation(EXIT_ON_CLOSE);
                 

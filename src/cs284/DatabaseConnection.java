@@ -54,7 +54,22 @@ public class DatabaseConnection {
      
      
      
-     public void registerID(String user, String password ,String firstName, String lastName, String course,String section ) throws SQLException{
+     public boolean registerID(String user, String password ,String firstName, String lastName, String course,String section ) throws SQLException{
+         if(hasDuplicatedUser(user)) {
+        	 JOptionPane.showMessageDialog(null, "This user has already been used");
+        	 return false;
+         }else if(user.isEmpty() || password.isEmpty()|| firstName.isEmpty()|| lastName.isEmpty() || course.isEmpty() || section.isEmpty()) {
+        	 JOptionPane.showMessageDialog(null, "Please fill all information");
+        	 return false;
+         }
+         
+         char[] sec = section.toCharArray();
+        for (int i = 0; i < sec.length; i++) {
+			if(!Character.isDigit(sec[i])) {
+				JOptionPane.showMessageDialog(null, "Please insert only Digit in Section field");
+				return false;
+			}
+		}
          
          
          String sqlInsert;
@@ -62,9 +77,32 @@ public class DatabaseConnection {
          
        
             s.execute(sqlInsert);
-        
+            
+            JOptionPane.showMessageDialog(null, "Register Successed\n Username: " +user);
+        return true;
      }
      
+     public boolean hasDuplicatedUser(String user) {
+    	 String sql = "SELECT * FROM Userincourse";
+    	 java.sql.PreparedStatement pstate;
+		try {
+			pstate = con.prepareStatement(sql);
+			  ResultSet data = pstate.executeQuery();
+			  
+			  while(data.next()) {
+				  if(data.getString("user").equals(user)) {
+					  return true;
+				  }
+				  
+			  }
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       
+		return false;
+     }
      
      
      
