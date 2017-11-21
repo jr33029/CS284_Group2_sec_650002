@@ -49,9 +49,9 @@ public class StdDiv {
 		return less;
 	}
 	
-	public double getPi(ArrayList<Double> list){
-		double Pisi = 0;
-		Pisi = getMax(list) - getMin(list);
-		return Pisi;
+	public double getRange(ArrayList<Double> list){
+		double Range = 0;
+		Range = getMax(list) - getMin(list);
+		return Range;
 	}
 }
