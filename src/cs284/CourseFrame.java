@@ -2,6 +2,7 @@ package cs284;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -17,6 +18,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import jxl.Sheet;
@@ -36,6 +38,7 @@ public class CourseFrame extends JFrame {
 	private JMenuItem importMenu = new JMenuItem("Import Excel(97-2003 *.xls) File");
 	private JMenuItem openMenu = new JMenuItem("Open");
 	private JMenuItem saveMenu = new JMenuItem("Save As...");
+        private JMenuItem logutMenu = new JMenuItem("Logout");
 	private BorderLayout bl = new BorderLayout();
 	private JMenuBar bar = new JMenuBar();
 	private File selectedFile;
@@ -50,6 +53,7 @@ public class CourseFrame extends JFrame {
 	private ArrayList<Student> StudentArray = new ArrayList<>();
 
 	public CourseFrame() {
+                
 		this.bllayout = new BorderLayout();
 		// TODO Auto-generated constructor stub
 		JFrame f1 = new JFrame();
@@ -80,7 +84,7 @@ public class CourseFrame extends JFrame {
 					Sheet ws1 = workbook.getSheet(0);
 					int numOfColumn = ws1.getColumns();
 					int numOfRow = ws1.getRows();
-					for (int i = 7; i < numOfRow; i++) {
+					for (int i = 7; i < numOfRow-1; i++) {
 						StudentArray.add(new Student(ws1.getCell(1, i).getContents(), ws1.getCell(2, i).getContents(),
 								ws1.getCell(3, i).getContents()));
 						System.out.println();
@@ -106,8 +110,11 @@ public class CourseFrame extends JFrame {
 		west.add(netscore = new JButton("Net Score"));
 		west.add(grade = new JButton("Grade"));
 		f1.add(west, BorderLayout.WEST);
-		JPanel cen = new JPanel();
-		cen.add(head = new JLabel("Hello EveryOne"));
+		JPanel cen = new JPanel(new BorderLayout());  //ขยายแล้วตารางมันจะได้เต็มจอ
+                head = new JLabel("Hello EveryOne",SwingConstants.CENTER);
+                head.setFont(new Font("Tahoma", Font.BOLD, 24));
+		cen.add(head);
+                
 		// import Excel File
 		exportMenu.addActionListener(new ActionListener() {
 
@@ -118,12 +125,26 @@ public class CourseFrame extends JFrame {
 			}
 		});
 
+               logutMenu.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        LoginFrame loginFrame = new LoginFrame();
+                        loginFrame.setVisible(true);
+                        f1.dispose();
+                                
+                       
+                    }
+                });
+                
+                
 		fileMenu.add(exportMenu);
+                fileMenu.addSeparator();
+                fileMenu.add(logutMenu);
 		mBar.add(fileMenu);
 		f1.add(mBar, BorderLayout.NORTH);
 		f1.add(cen);
 		f1.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		f1.setSize(600, 600);
+		f1.setSize(600, 600);              
 		f1.setTitle("Hello CS284");
 		f1.setLocationRelativeTo(null);
 		f1.setVisible(true);
@@ -185,6 +206,7 @@ public class CourseFrame extends JFrame {
 			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
 					ex);
 		}
-		new CourseFrame();
+            CourseFrame courseFrame = new CourseFrame();
+          
 	}
 }

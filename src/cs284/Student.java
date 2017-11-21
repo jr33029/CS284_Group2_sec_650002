@@ -15,6 +15,22 @@ public class Student {
 		status = true;
 		totalPoint = 0;
 	}
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 	
 	
 	public Student(String code,String name,String type) {

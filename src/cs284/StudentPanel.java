@@ -20,44 +20,51 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import jxl.Sheet;
 import jxl.Workbook;
 
-public class StudentPanel {
+public class StudentPanel implements TableModelListener{
 	// Array of Student
 	private ArrayList<Student> StudentArray = new ArrayList<>();
 	private FileWriter write = null;
 	private BufferedWriter print = null;
 	private JPanel jpanel;
+        private JTable table ;
+                
 	public ArrayList<Student> getStudentArray() {
 		return StudentArray;
 	}
 
 	public StudentPanel(File selectedFile, ArrayList<Student> arrayList) {
 		JButton ok = new JButton("Confirm");
-		JPanel panel = new JPanel();
+		JPanel panel = new JPanel(new BorderLayout());
 		panel.setLayout(new BorderLayout());
 		// test
 		String[][] data = new String[arrayList.size()][100];
 		String[] head = new String[5];
-		head[0] = "เธฃเธซเธฑเธชเธ�เธฑเธ�เธจเธถเธ�เธฉเธฒ";
-		head[1] = "เธ�เธทเน�เธญ-เธ�เธฒเธกเธชเธ�เธธเธฅ";
-		head[2] = "เธ เธฒเธ�เธงเธดเธ�เธฒ";
-		head[3] = "สถานะก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝยน";
-		head[4] = "๏ฟฝ๏ฟฝแนน";
+		head[0] = "รหัสนักศึกษา";
+		head[1] = "ชื่อ-นามสกุล";
+		head[2] = "ภาควิชา";
+		head[3] = "สถานะการเรียน";
+		head[4] = "คะแนน";
 		for (int i = 0; i < arrayList.size(); i++) {
 			data[i][0] = arrayList.get(i).getCode();
 			data[i][1] = arrayList.get(i).getName();
 			data[i][2] = arrayList.get(i).getType();
-			data[i][3] = "๏ฟฝัง๏ฟฝ๏ฟฝ๏ฟฝยน๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ";
+			data[i][3] = "ศึกษาอยู่";
 			data[i][4] = arrayList.get(i).getTotalPoint() + "";
 		}
-		JTable table = new JTable(data, head);
+		table = new JTable(data, head);
+                table.getModel().addTableModelListener(this);
 		JScrollPane scroll = new JScrollPane(table);
 		table.getColumnModel().getColumn(1).setPreferredWidth(200);
-		panel.add(scroll);
+                JPanel tablePanel = new JPanel(new BorderLayout());
+                tablePanel.add(scroll);
+		panel.add(tablePanel);
 		JPanel menubot = new JPanel();
 		JPanel bot = new JPanel();
 		bot.setLayout(new GridLayout(2, 1));
@@ -139,9 +146,26 @@ public class StudentPanel {
 			}
 		});
 		jpanel =  panel;
+                
 	}
+        
+        
+        
+        
+        
 	
 	public JPanel getPanel(){
 		return jpanel;
 	}
+
+    @Override
+    public void tableChanged(TableModelEvent e) {
+        System.out.println(e.getColumn() );
+        System.out.println(e.getFirstRow() );
+                
+        
+       
+                
+       
+    }
 }
