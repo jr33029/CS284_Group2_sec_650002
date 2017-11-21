@@ -23,38 +23,24 @@ import jxl.Sheet;
 import jxl.Workbook;
 
 public class CourseFrame extends JFrame {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	private JButton course, addraw, netscore, grade;
+	private JButton addraw, netscore, grade;
 	private JLabel head;
-	private AllPanel panel;
-
+	private StudentPanel stpanel;
+	private StudentPanelTotal stTpanel;
+	private GradePanel gpanel;
 	private Reader reader = new Reader();
-	
 	private JMenuBar mBar = new JMenuBar();
 	private JMenu fileMenu = new JMenu("File");
 	private JMenuItem exportMenu = new JMenuItem("Export Excel(97-2003 *.xls) File");
 	private JMenuItem importMenu = new JMenuItem("Import Excel(97-2003 *.xls) File");
-	private JMenuItem openMenu  = new JMenuItem("Open");
-	private JMenuItem saveMenu  = new JMenuItem("Save As...");
-	
+	private JMenuItem openMenu = new JMenuItem("Open");
+	private JMenuItem saveMenu = new JMenuItem("Save As...");
 	private BorderLayout bl = new BorderLayout();
-	
-	private JMenuBar bar= new JMenuBar();
-	
-        
-	
-	
+	private JMenuBar bar = new JMenuBar();
 	private File selectedFile;
 	private JLabel selectFileLabel = new JLabel("No File");
-	
 	private BorderLayout bllayout;
-        
-        
-        
-        
 
 	public ArrayList<Student> getStudentArray() {
 		return StudentArray;
@@ -64,17 +50,13 @@ public class CourseFrame extends JFrame {
 	private ArrayList<Student> StudentArray = new ArrayList<>();
 
 	public CourseFrame() {
-        this.bllayout = new BorderLayout();
-       
-           
-        
+		this.bllayout = new BorderLayout();
 		// TODO Auto-generated constructor stub
 		JFrame f1 = new JFrame();
 		f1.setLayout(bllayout);
-		f1.add(selectFileLabel ,BorderLayout.SOUTH);
-		
+		f1.add(selectFileLabel, BorderLayout.SOUTH);
 		importMenu.addActionListener(new ActionListener() {
-			//test
+			// test
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -83,23 +65,24 @@ public class CourseFrame extends JFrame {
 					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 					chooser.setFileFilter(new FileNameExtensionFilter("Excel File (*.xls)", "xls"));
 					int opt = chooser.showOpenDialog(null);
-					/*while (opt == JFileChooser.CANCEL_OPTION || opt == JFileChooser.ERROR_OPTION) {
-						JOptionPane.showMessageDialog(null, "Please Select file");
-						opt = chooser.showOpenDialog(null);
-					}*/
+					/*
+					 * while (opt == JFileChooser.CANCEL_OPTION || opt ==
+					 * JFileChooser.ERROR_OPTION) {
+					 * JOptionPane.showMessageDialog(null,
+					 * "Please Select file"); opt =
+					 * chooser.showOpenDialog(null); }
+					 */
 					String fName = chooser.getSelectedFile().getPath();
-					
 					selectedFile = new File(fName);
-					selectFileLabel.setText("File Name: "+selectedFile.getName());
+					selectFileLabel.setText("File Name: " + selectedFile.getName());
 					System.out.println("j");
 					Workbook workbook = Workbook.getWorkbook(new java.io.File(fName));
 					Sheet ws1 = workbook.getSheet(0);
-					
-					
 					int numOfColumn = ws1.getColumns();
-					int numOfRow = ws1.getRows();                
+					int numOfRow = ws1.getRows();
 					for (int i = 7; i < numOfRow; i++) {
-						StudentArray.add(new Student(ws1.getCell(1, i).getContents(), ws1.getCell(2, i).getContents() , ws1.getCell(3, i).getContents()));
+						StudentArray.add(new Student(ws1.getCell(1, i).getContents(), ws1.getCell(2, i).getContents(),
+								ws1.getCell(3, i).getContents()));
 						System.out.println();
 					}
 					workbook.close();
@@ -108,121 +91,50 @@ public class CourseFrame extends JFrame {
 					// TODO Auto-generated catch block
 					ex.printStackTrace();
 				}
-				
-				
 			}
 		});
-		
-		
+
 		fileMenu.add(openMenu);
 		fileMenu.add(saveMenu);
 		fileMenu.addSeparator();
 		fileMenu.add(importMenu);
-		
 		bar.add(fileMenu);
 		f1.add(bar, BorderLayout.NORTH);
-		
-
-
 		JPanel west = new JPanel();
-		west.setLayout(new GridLayout(4, 1));
-		west.add(course = new JButton("Course"));
+		west.setLayout(new GridLayout(3, 1));
 		west.add(addraw = new JButton("Add Raw Score"));
 		west.add(netscore = new JButton("Net Score"));
 		west.add(grade = new JButton("Grade"));
 		f1.add(west, BorderLayout.WEST);
 		JPanel cen = new JPanel();
 		cen.add(head = new JLabel("Hello EveryOne"));
-		
-		//import Excel File
+		// import Excel File
 		exportMenu.addActionListener(new ActionListener() {
-			
-                    
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-			/*	JFileChooser chooser = new JFileChooser();
 
-				try {
-
-					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-					chooser.setFileFilter(new FileNameExtensionFilter("Excel 97-2003 Workbook (*.xls)", "xls"));
-
-					int opt = chooser.showOpenDialog(null);
-
-					while (opt == JFileChooser.CANCEL_OPTION || opt == JFileChooser.ERROR_OPTION) {
-						JOptionPane.showMessageDialog(null, "Please Select file");
-						opt = chooser.showOpenDialog(null);
-					}
-
-					// chooser.showSaveDialog(null);
-
-					String fName = chooser.getSelectedFile().getPath();
-					System.out.println(fName);
-					Workbook workbook = Workbook.getWorkbook(new java.io.File(fName));
-
-					Sheet ws1 = workbook.getSheet(0);
-
-					int numOfColumn = ws1.getColumns();
-					int numOfRow = ws1.getRows();
-
-					for (int i = 0; i < numOfRow; i++) {
-						
-							// getCell(column, row)
-							//System.out.print(ws1.getCell(j, i).getContents() + " ");
-							StudentArray.add(new Student(ws1.getCell(0, i).getContents(), ws1.getCell(1, i).getContents(), ws1.getCell(2, i).getContents()));
-						
-						System.out.println();
-					}
-
-					workbook.close();
-					System.out.println("Read Sucess");
-				} catch (Exception ex) {
-					// TODO Auto-generated catch block
-					ex.printStackTrace();
-				}
-				*/
 			}
 		});
-		
-		
+
 		fileMenu.add(exportMenu);
 		mBar.add(fileMenu);
-		f1.add(mBar,BorderLayout.NORTH);
-		
-		
-
+		f1.add(mBar, BorderLayout.NORTH);
 		f1.add(cen);
 		f1.setDefaultCloseOperation(EXIT_ON_CLOSE);
-                
-               
 		f1.setSize(600, 600);
-                
 		f1.setTitle("Hello CS284");
-                f1.setLocationRelativeTo(null);
-                    
+		f1.setLocationRelativeTo(null);
 		f1.setVisible(true);
-		course.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				panel = new AllPanel();
-				cen.removeAll();
-				cen.add(panel.CoursePanel());
-				f1.pack();
-				f1.setSize(600, 600);
-
-			}
-		});
 		addraw.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				panel = new AllPanel();
+				stpanel = new StudentPanel(selectedFile, getStudentArray());
 				cen.removeAll();
-				cen.add(panel.StudentPanel(selectedFile ,getStudentArray()));
+				cen.add(stpanel.getPanel());
 				f1.pack();
 			}
 		});
@@ -231,45 +143,48 @@ public class CourseFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				panel = new AllPanel();
+				stTpanel = new StudentPanelTotal(selectedFile, getStudentArray());
 				cen.removeAll();
-				cen.add(panel.StudentPanelTotal(selectedFile ,getStudentArray()));
+				cen.add(stTpanel.getPanel());
 				f1.pack();
 			}
 		});
-		
+
 		grade.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				panel = new AllPanel();
+				gpanel = new GradePanel(selectedFile, getStudentArray());
 				cen.removeAll();
-				cen.add(panel.GraderPanel(selectedFile ,getStudentArray()));
+				cen.add(gpanel.getPanel());
 				f1.pack();
 			}
 		});
-		
-		
+
 	}
 
 	public static void main(String[] args) {
-            try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+		try {
+			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+				if ("Windows".equals(info.getName())) {
+					javax.swing.UIManager.setLookAndFeel(info.getClassName());
+					break;
+				}
+			}
+		} catch (ClassNotFoundException ex) {
+			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
+					ex);
+		} catch (InstantiationException ex) {
+			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
+					ex);
+		} catch (IllegalAccessException ex) {
+			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
+					ex);
+		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
+					ex);
+		}
 		new CourseFrame();
 	}
 }
