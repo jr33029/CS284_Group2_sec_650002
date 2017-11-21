@@ -48,4 +48,10 @@ public class StdDiv {
 		}
 		return less;
 	}
+	
+	public double getPi(ArrayList<Double> list){
+		double Pisi = 0;
+		Pisi = getMax(list) - getMin(list);
+		return Pisi;
+	}
 }
