@@ -3,6 +3,7 @@ package cs284;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -26,6 +27,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import jxl.Sheet;
 import jxl.Workbook;
+import jxl.read.biff.BiffException;
 
 public class StudentPanel implements TableModelListener{
 	// Array of Student
@@ -40,7 +42,7 @@ public class StudentPanel implements TableModelListener{
 	}
 
 	public StudentPanel(File selectedFile, ArrayList<Student> arrayList) {
-		JButton ok = new JButton("Confirm");
+		JButton confirmBtn = new JButton("Confirm");
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setLayout(new BorderLayout());
 		// test
@@ -78,12 +80,17 @@ public class StudentPanel implements TableModelListener{
 		menubot.add(getV);
 		menubot.add(getM);
 		bot.add(menubot);
-		bot.add(ok);
+		bot.add(confirmBtn);
 		panel.add(bot, BorderLayout.SOUTH);
-		ok.addActionListener(new ActionListener() {
+		confirmBtn.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+                            
+                            
+                            
+                            JOptionPane.showConfirmDialog(null, "Are you sure you want to continue?");
+                            
 				// TODO Auto-generated method stub
 				JFrame textf = new JFrame();
 				JTextField textn = new JTextField(10);
@@ -124,7 +131,7 @@ public class StudentPanel implements TableModelListener{
 					}
 					workbook.close();
 					System.out.println("Read Sucess");
-				} catch (Exception ex) {
+				} catch (HeadlessException | IOException | IndexOutOfBoundsException | BiffException ex) {
 					// TODO Auto-generated catch block
 					ex.printStackTrace();
 				}
@@ -163,7 +170,10 @@ public class StudentPanel implements TableModelListener{
         System.out.println(e.getColumn() );
         System.out.println(e.getFirstRow() );
                 
-        
+        System.out.println("");
+                
+                table.getModel().getValueAt(0, 0);
+                
        
                 
        

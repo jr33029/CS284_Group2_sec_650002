@@ -243,23 +243,13 @@ public class RegisterFrame extends javax.swing.JFrame {
 
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
         // TODO add your handling code here:
-        if(!(pwField.getText()).equals(confirmPWField.getText())){
-            JOptionPane.showMessageDialog(rootPane, "password mismatch");
-            return ;
-        }
-        
-        else if( pwField.getText().equals("")  ){
-            
-            JOptionPane.showMessageDialog(rootPane, "can't use empty passwoord");
-            return;
-            
-        }
+     
         
         
         DatabaseConnection db = new DatabaseConnection();
         boolean state = false;
         try {
-          state =  db.registerID(usernameTF.getText(), pwField.getText(), firstNameTf.getText(), lastNameTF.getText(), courseTF.getText(), sectionTF.getText());
+          state =  db.registerID(usernameTF.getText(), pwField.getText(),confirmPWField.getText(), firstNameTf.getText(), lastNameTF.getText(), courseTF.getText(), sectionTF.getText());
             
             
         } catch ( Exception ex) {

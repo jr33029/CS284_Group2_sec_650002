@@ -54,7 +54,14 @@ public class DatabaseConnection {
      
      
      
-     public boolean registerID(String user, String password ,String firstName, String lastName, String course,String section ) throws SQLException{
+     public boolean registerID(String user, String password ,String cfmPassword,String firstName, String lastName, String course,String section ) throws SQLException{
+         
+            if(!(password.equals(cfmPassword))){
+            JOptionPane.showMessageDialog(null, "password mismatch");
+            return false;
+        }
+        
+       
          if(hasDuplicatedUser(user)) {
         	 JOptionPane.showMessageDialog(null, "This user has already been used");
         	 return false;
