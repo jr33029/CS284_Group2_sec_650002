@@ -64,37 +64,12 @@ public class CourseFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				JFileChooser chooser = new JFileChooser();
-				try {
-					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-					chooser.setFileFilter(new FileNameExtensionFilter("Excel File (*.xls)", "xls"));
-					int opt = chooser.showOpenDialog(null);
-					/*
-					 * while (opt == JFileChooser.CANCEL_OPTION || opt ==
-					 * JFileChooser.ERROR_OPTION) {
-					 * JOptionPane.showMessageDialog(null,
-					 * "Please Select file"); opt =
-					 * chooser.showOpenDialog(null); }
-					 */
-					String fName = chooser.getSelectedFile().getPath();
-					selectedFile = new File(fName);
-					selectFileLabel.setText("File Name: " + selectedFile.getName());
-					System.out.println("j");
-					Workbook workbook = Workbook.getWorkbook(new java.io.File(fName));
-					Sheet ws1 = workbook.getSheet(0);
-					int numOfColumn = ws1.getColumns();
-					int numOfRow = ws1.getRows();
-					for (int i = 7; i < numOfRow-1; i++) {
-						StudentArray.add(new Student(ws1.getCell(1, i).getContents(), ws1.getCell(2, i).getContents(),
-								ws1.getCell(3, i).getContents()));
-						System.out.println();
-					}
-					workbook.close();
-					System.out.println("Read Sucess");
-				} catch (Exception ex) {
-					// TODO Auto-generated catch block
-					ex.printStackTrace();
-				}
+                                
+                                ExcelFileController controller = new ExcelFileController();
+                                
+                               controller.readExcelFile(selectFileLabel);
+				StudentArray = controller.getStudentArray();
+                                
 			}
 		});
 
