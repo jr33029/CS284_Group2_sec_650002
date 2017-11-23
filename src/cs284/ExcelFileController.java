@@ -32,7 +32,7 @@ public class ExcelFileController {
     
     
     //If this method return true that means the file is read successfully.
-    public boolean readExcelFile(JLabel selectFileLabel){
+    public boolean readExcelFile(JLabel selectFileLabel) {
         
         
 				try {
@@ -62,7 +62,7 @@ public class ExcelFileController {
                                             
 						StudentArray.add(new Student(ws1.getCell(1, i).getContents(), ws1.getCell(2, i).getContents(),
 								ws1.getCell(3, i).getContents()));
-						System.out.println();
+						
 					}
 					workbook.close();
 					System.out.println("Read Sucess");
