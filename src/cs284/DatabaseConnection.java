@@ -25,7 +25,7 @@ public class DatabaseConnection {
     private String url = "jdbc:mariadb://http://mydpk.ddns.net:3307/pong284_CS284";
     private String user = "pong284"; // เธ•เธฒเธกเธ—เธตเน�เน€เธ�เธฃเธทเน�เธญเธ�เธ�เธญเธ�เธ�เธธเธ“เธ•เธฑเน�เธ�เธ�เน�เธฒเน�เธงเน�
     private String pass = "123456"; // เธ•เธฒเธกเธ—เธตเน�เน€เธ�เธฃเธทเน�เธญเธ�เธ�เธญเธ�เธ�เธธเธ“เธ•เธฑเน�เธ�เธ�เน�เธฒเน�เธงเน�
-    
+    private String fName,LName, course ,section;
     
      private MariaDbConnection con = null;
      private Statement s = null;
@@ -146,7 +146,10 @@ public class DatabaseConnection {
                      
                     if(successPW.equals(password) && successPW !=null ){
                         pwSuccess = true;
-
+                        fName = data.getString("firstName");
+                        LName =data.getString("lastName");
+                        course = data.getString("course");
+                        section = data.getString("section");
                         return true;
                     }
 
@@ -181,6 +184,26 @@ public class DatabaseConnection {
         }
          
      }
+
+    public String getUser() {
+        return user;
+    }
+
+    public String getfName() {
+        return fName;
+    }
+
+    public String getLName() {
+        return LName;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public String getSection() {
+        return section;
+    }
      
        public static void main(String[] args) {
         System.out.println("เน€เธฃเธดเน�เธกเธ•เน�เธ�เน�เธ�เธฃเน�เธ�เธฃเธก.........");

@@ -22,6 +22,7 @@ public class GradePanel {
 			data[i][0] = arrayList.get(i).getCode();
 			data[i][1] = arrayList.get(i).getName();
 			data[i][2] = arrayList.get(i).getType();
+                        
 			data[i][3] = "";
 		}
 		JTable table = new JTable(data, head);
