@@ -28,6 +28,8 @@ import jxl.Workbook;
 
 public class CourseFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
+	
+	private ArrayList<Student> StudentArray ;
 	private JButton addraw, netscore, grade;
 	private JLabel head;
 	private StudentPanel stpanel;
@@ -48,22 +50,23 @@ public class CourseFrame extends JFrame {
 	private BorderLayout bllayout;
         
         private JTabbedPane tab = new JTabbedPane();
-        
+        private GradeCriteriaManager grademng;
         
 	public ArrayList<Student> getStudentArray() {
 		return StudentArray;
 	}
 
 	// Array of Student
-	private ArrayList<Student> StudentArray = new ArrayList<>();
+	
 
 	public CourseFrame(String fName ,String lName ,String subject ,String section) {
-                
+        this.setPreferredSize(new Dimension(800, 700));        
 		this.bllayout = new BorderLayout();
 		// TODO Auto-generated constructor stub
-		JFrame f1 = new JFrame();
-		f1.setLayout(bllayout);
-		f1.add(selectFileLabel, BorderLayout.SOUTH);
+		
+		
+		setLayout(bllayout);
+		add(selectFileLabel, BorderLayout.SOUTH);
 		importMenu.addActionListener(new ActionListener() {
 			// test
 			@Override
@@ -76,6 +79,10 @@ public class CourseFrame extends JFrame {
                               if( controller.readExcelFile(selectFileLabel)){
                                   StudentArray = controller.getStudentArray();
                                   addraw.setEnabled(true);
+                                  StudentArray = controller.getStudentArray();
+                                 // System.out.println(StudentArray);
+                              }else {
+                            	  addraw.setEnabled(false);
                               }
 				
 			}
@@ -86,13 +93,13 @@ public class CourseFrame extends JFrame {
 		fileMenu.addSeparator();
 		fileMenu.add(importMenu);
 		bar.add(fileMenu);
-		f1.add(bar, BorderLayout.NORTH);
+		add(bar, BorderLayout.NORTH);
 		JPanel west = new JPanel();
 		west.setLayout(new GridLayout(3, 1));
 		west.add(addraw = new JButton("Add Raw Score"));
 		west.add(netscore = new JButton("Net Score"));
 		west.add(grade = new JButton("Grade"));
-		f1.add(west, BorderLayout.WEST);
+		add(west, BorderLayout.WEST);
 		JPanel cen = new JPanel(new BorderLayout());  //ขยายแล้วตารางมันจะได้เต็มจอ
                 head = new JLabel("Hello "+ fName +" " + lName + "\n" + subject+ " " + section ,SwingConstants.CENTER);
                 head.setFont(new Font("Tahoma", Font.BOLD, 24));
@@ -113,7 +120,7 @@ public class CourseFrame extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         LoginFrame loginFrame = new LoginFrame();
                         loginFrame.setVisible(true);
-                        f1.dispose();
+                        dispose();
                                 
                        
                     }
@@ -124,31 +131,35 @@ public class CourseFrame extends JFrame {
                 fileMenu.addSeparator();
                 fileMenu.add(logutMenu);
 		mBar.add(fileMenu);
-		f1.add(mBar, BorderLayout.NORTH);
-		f1.add(cen);
-		f1.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		f1.setSize(600, 600);              
-		f1.setTitle("Hello CS284");
-		f1.setLocationRelativeTo(null);
-		f1.setVisible(true);
+		add(mBar, BorderLayout.NORTH);
+		add(cen);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setSize(600, 600);              
+		setTitle("Hello CS284");
+		setLocationRelativeTo(null);
+		setVisible(true);
                 
                 addraw.setEnabled(false);
                 addraw.setToolTipText("You must import or open file before add raw score");
                
 		addraw.addActionListener(new ActionListener() {
-                        int rawpointimes=0;
+                        int numOfScorePanel=0;
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
                                 cen.removeAll();
-				stpanel = new StudentPanel(selectedFile, getStudentArray());
-                                tab.add(stpanel.getPanel());
-                                tab.setTitleAt(rawpointimes, "คะแนนดิบ"+rawpointimes);
-                                rawpointimes= rawpointimes+1;
+				stpanel = new StudentPanel(selectedFile, getStudentArray(),numOfScorePanel);
+                                tab.add(stpanel);
+                                tab.setTitleAt(numOfScorePanel, "คะแนนดิบ "+numOfScorePanel);
+                                numOfScorePanel= numOfScorePanel+1;
 				
 				cen.add(tab);
-				f1.pack();
+				cen.repaint();
+				
+				pack();
 			}
+			
+			
 		});
 		netscore.addActionListener(new ActionListener() {
 
@@ -158,7 +169,7 @@ public class CourseFrame extends JFrame {
 				stTpanel = new StudentPanelTotal(selectedFile, getStudentArray());
 				cen.removeAll();
 				cen.add(stTpanel.getPanel());
-				f1.pack();
+				pack();
 			}
 		});
 
@@ -167,10 +178,12 @@ public class CourseFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				grademng = new GradeCriteriaManager(getStudentArray());
+				grademng.gradeRealize();
 				gpanel = new GradePanel(selectedFile, getStudentArray());
 				cen.removeAll();
-				cen.add(gpanel.getPanel());
-				f1.pack();
+				cen.add(gpanel);
+				pack();
 			}
 		});
 

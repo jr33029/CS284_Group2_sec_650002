@@ -2,10 +2,13 @@ package cs284;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -21,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -29,22 +33,24 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
-public class StudentPanel implements TableModelListener{
+public class StudentPanel extends JPanel implements TableModelListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Array of Student
-	private ArrayList<Student> StudentArray = new ArrayList<>();
+	//private ArrayList<Student> StudentArray = new ArrayList<>();
 	private FileWriter write = null;
 	private BufferedWriter print = null;
 	private JPanel jpanel;
-        private JTable table ;
-                
-	public ArrayList<Student> getStudentArray() {
-		return StudentArray;
-	}
+    private JTable table ;
+    private double weight , maxScore;            
+	
 
-	public StudentPanel(File selectedFile, ArrayList<Student> arrayList) {
+	public StudentPanel(File selectedFile, ArrayList<Student> arrayList, int numOfScorePanel) {
 		JButton confirmBtn = new JButton("Confirm");
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setLayout(new BorderLayout());
+		JButton editBtn = new JButton("Edit");
+		
 		// test
 		String[][] data = new String[arrayList.size()][100];
 		String[] head = new String[5];
@@ -58,101 +64,196 @@ public class StudentPanel implements TableModelListener{
 			data[i][1] = arrayList.get(i).getName();
 			data[i][2] = arrayList.get(i).getType();
 			data[i][3] = "ศึกษาอยู่";
-			data[i][4] = arrayList.get(i).getTotalPoint() + "";
+			data[i][4] = "";
 		}
+		this.setLayout(new BorderLayout());
 		table = new JTable(data, head);
                 table.getModel().addTableModelListener(this);
 		JScrollPane scroll = new JScrollPane(table);
 		table.getColumnModel().getColumn(1).setPreferredWidth(200);
+		table.getColumnModel().getColumn(0).setPreferredWidth(100);
+		
                 JPanel tablePanel = new JPanel(new BorderLayout());
                 tablePanel.add(scroll);
-		panel.add(tablePanel);
+		add(tablePanel);
 		JPanel menubot = new JPanel();
 		JPanel bot = new JPanel();
 		bot.setLayout(new GridLayout(2, 1));
 		menubot.setLayout(new GridLayout(2, 2));
-		JLabel sayV = new JLabel("Score Value");
-		JLabel sayM = new JLabel("Max Score");
-		JTextField getV = new JTextField(10);
-		JTextField getM = new JTextField(10);
-		menubot.add(sayV);
-		menubot.add(sayM);
-		menubot.add(getV);
-		menubot.add(getM);
+		JLabel weightLa = new JLabel("Weight (%)");
+		JLabel maxScoreLa = new JLabel("Max Score");
+		JTextField weightTf = new JTextField(10);
+		JTextField maxScoreTf = new JTextField(10);
+		menubot.add(weightLa);
+		menubot.add(maxScoreLa);
+		menubot.add(weightTf);
+		menubot.add(maxScoreTf);
 		bot.add(menubot);
+		
 		bot.add(confirmBtn);
-		panel.add(bot, BorderLayout.SOUTH);
+		bot.add(editBtn);
+		JPanel north = new JPanel(new FlowLayout(FlowLayout.TRAILING));
+		north.add(editBtn);
+		add(north, BorderLayout.NORTH);
+		add(bot, BorderLayout.SOUTH);
+		
+		editBtn.setEnabled(false);
+		
+		
+		weightTf.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					try{
+						
+						weight = Double.parseDouble(weightTf.getText());
+						if(weight <0 ||weight > 100) {
+							throw new NumberFormatException("Weight must in 0 - 100 range");
+						}
+						
+						JOptionPane.showMessageDialog(null, "Weight : "+ weight +"(%)");
+					}catch(NumberFormatException ex){
+						JOptionPane.showMessageDialog(null, "Weight must in 0 - 100 range");
+					}
+				}
+			}
+		});
+		
+		
+		maxScoreTf.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					try{
+						maxScore= Double.parseDouble(maxScoreTf.getText());
+						
+						if(maxScore <0)throw new NumberFormatException("Wrong format Number");
+						
+						JOptionPane.showMessageDialog(null, "คะแนนเต็มของการสอบครั้งนี้ : " +maxScore);
+					}catch(NumberFormatException ex) {
+						JOptionPane.showMessageDialog(null, "Wrong format Number");
+					}
+				}
+			}
+		});
+		
 		confirmBtn.addActionListener(new ActionListener() {
+
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
                             
                             
                             
-                            JOptionPane.showConfirmDialog(null, "Are you sure you want to continue?");
+                            //JOptionPane.showConfirmDialog(null, "Are you sure you want to continue?");
                             
 				// TODO Auto-generated method stub
-				JFrame textf = new JFrame();
-				JTextField textn = new JTextField(10);
-				textf.add(textf);
-				try {
-					write = new FileWriter(textn.getText() + ".txt");
-					print = new BufferedWriter(write);
-					print.write("");
-					print.close();
-					write.close();
-					textf.pack();
-					textf.setVisible(true);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch
-					e1.printStackTrace();
-				}
-
-				try {
-					JFileChooser chooser = new JFileChooser();
-					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-					chooser.setFileFilter(new FileNameExtensionFilter("Excel 97-2003 Workbook (*.xls)", "xls"));
-					int opt = chooser.showOpenDialog(null);
-					while (opt == JFileChooser.CANCEL_OPTION || opt == JFileChooser.ERROR_OPTION) {
-						JOptionPane.showMessageDialog(null, "Please Select file");
-						opt = chooser.showOpenDialog(null);
+			
+				try{
+					
+					weight = Double.parseDouble(weightTf.getText());
+					if(weight <0 ||weight > 100) {
+						throw new NumberFormatException("Weight must in 0 - 100 range");
 					}
-					String fName = chooser.getSelectedFile().getPath();
-					System.out.println(fName);
-					Workbook workbook = Workbook.getWorkbook(new java.io.File(fName));
-					Sheet ws1 = workbook.getSheet(0);
-					int numOfColumn = ws1.getColumns();
-					int numOfRow = ws1.getRows();
-
-					for (int i = 0; i < numOfRow; i++) {
-						StudentArray.add(new Student(ws1.getCell(0, i).getContents(), ws1.getCell(1, i).getContents(),
-								ws1.getCell(2, i).getContents()));
-						System.out.println();
+					
+					JOptionPane.showMessageDialog(null, "Weight : "+ weight +"(%)");
+				}catch(NumberFormatException ex){
+					JOptionPane.showMessageDialog(null, "Weight must in 0 - 100 range");
+				}
+				
+				try{
+					maxScore= Double.parseDouble(maxScoreTf.getText());
+					
+					if(maxScore <0)throw new NumberFormatException("Wrong format Number");
+					
+					JOptionPane.showMessageDialog(null, "คะแนนเต็มของการสอบครั้งนี้ : " +maxScore);
+				}catch(NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "Wrong format Number");
+				}
+				
+				
+				
+				
+				System.out.println(table.getModel().getValueAt(0, 4));
+				System.out.println(table.getModel().getRowCount());
+				for (int i = 0; i < table.getModel().getRowCount(); i++) {
+					try {
+						
+							arrayList.get(i).set(numOfScorePanel,Double.parseDouble((String) table.getModel().getValueAt(i, 4)));
+						
+					}catch(IndexOutOfBoundsException ex) {
+						
+							arrayList.get(i).add(numOfScorePanel,Double.parseDouble((String) table.getModel().getValueAt(i, 4)));
+							
+					}catch(NumberFormatException ex) {
+						JOptionPane.showMessageDialog(null, "Wrong format score.");
+						return;
 					}
-					workbook.close();
-					System.out.println("Read Sucess");
-				} catch (HeadlessException | IOException | IndexOutOfBoundsException | BiffException ex) {
-					// TODO Auto-generated catch block
-					ex.printStackTrace();
+								
+									
+					System.out.println(arrayList.get(i).getListOfScore());
 				}
-				String[][] data = new String[StudentArray.size()][4];
-				String head[] = new String[4];
-				head[0] = "Student ID";
-				head[1] = "Name";
-				head[2] = "LastName";
-				head[3] = "Point";
-				for (int i = 0; i < StudentArray.size(); i++) {
-					data[i][0] = StudentArray.get(i).getCode();
-					data[i][1] = StudentArray.get(i).getName();
-					data[i][2] = StudentArray.get(i).getTotalPoint() + "";
-					data[i][3] = "0";
+				
+				System.out.println(arrayList);
+				
+				for (int i = 0; i < arrayList.size(); i++) {
+					double ttScore= arrayList.get(i).getTotalPoint();
+					ttScore+= arrayList.get(i).getListOfScore().get(numOfScorePanel)*(weight/100.0);
+					arrayList.get(i).setTotalPoint(ttScore);
 				}
-				JTable table = new JTable(data, head);
-				JScrollPane scroll = new JScrollPane(table);
-				Component add = panel.add(scroll);
+				
+				
+				confirmBtn.setEnabled(false);
+				table.setEnabled(false);
+				
+				
+				editBtn.setEnabled(true);
 			}
 		});
-		jpanel =  panel;
+		
+		
+		editBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				table.setEnabled(true);
+				confirmBtn.setEnabled(true);
+				editBtn.setEnabled(false);
+			}
+		});
+		
+		
+		
+		
                 
 	}
         
@@ -161,9 +262,7 @@ public class StudentPanel implements TableModelListener{
         
         
 	
-	public JPanel getPanel(){
-		return jpanel;
-	}
+	
 
     @Override
     public void tableChanged(TableModelEvent e) {

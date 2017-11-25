@@ -53,11 +53,12 @@ public class ExcelFileController {
 			int numOfColumn = ws1.getColumns();
 			int numOfRow = ws1.getRows();
 			String pattern = "[0-9]{10}";
-			for (int i = 7; i < numOfRow - 1; i++) {
-				if (!ws1.getCell(1, i).getContents().matches(pattern)) {
+			for (int i = 7; i < numOfRow ; i++) {
+				/*if (!ws1.getCell(1, i).getContents().matches(pattern)) {
 					throw new NumberFormatException();
-				}
-
+				}*/
+				
+				
 				StudentArray.add(new Student(ws1.getCell(1, i).getContents(), ws1.getCell(2, i).getContents(),
 						ws1.getCell(3, i).getContents()));
 

@@ -1,11 +1,17 @@
 package cs284;
 
+import java.util.ArrayList;
+
 public class Student {
 	
 	private String name, type,grade;
+	
+	
+
 	private boolean status;
 	String code;
-	private int totalPoint;
+	private double totalPoint;
+	private  ArrayList<Double> listOfScore = new ArrayList<>();
 	
 	public Student(String code,String name) {
 		// TODO Auto-generated constructor stub
@@ -73,11 +79,47 @@ public class Student {
 	public String getCode() {
 		return code;
 	}
-	public int getTotalPoint() {
+	public double getTotalPoint() {
 		return totalPoint;
 	}
-	public void setTotalPoint(int totalPoint) {
-		this.totalPoint = totalPoint;
+	public void setTotalPoint(double ttScore) {
+		this.totalPoint = ttScore;
+	}
+	
+	
+	public String getGrade() {
+		return grade;
+	}
+	
+	
+	
+	//method for list of score
+	public boolean add(Double e) {
+		return listOfScore.add(e);
+	}
+
+	public ArrayList<Double> getListOfScore() {
+		return listOfScore;
+	}
+
+	public void add(int index, Double element) {
+		listOfScore.add(index, element);
+	}
+
+	public void clear() {
+		listOfScore.clear();
+	}
+
+	public Double get(int index) {
+		return listOfScore.get(index);
+	}
+
+	public Double set(int index, Double element) {
+		return listOfScore.set(index, element);
+	}
+
+	public int size() {
+		return listOfScore.size();
 	}
 	
 }
