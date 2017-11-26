@@ -48,7 +48,7 @@ public class CourseFrame extends JFrame {
 	private File selectedFile;
 	private JLabel selectFileLabel = new JLabel("No File");
 	private BorderLayout bllayout;
-        
+	ExcelFileController controller = new ExcelFileController();
         private JTabbedPane tab = new JTabbedPane();
         private GradeCriteriaManager grademng;
         
@@ -73,7 +73,7 @@ public class CourseFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
                                 
-                                ExcelFileController controller = new ExcelFileController();
+                                
                                 
                                 
                               if( controller.readExcelFile(selectFileLabel)){
@@ -111,7 +111,7 @@ public class CourseFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-
+					controller.writeExcelFile();
 			}
 		});
 

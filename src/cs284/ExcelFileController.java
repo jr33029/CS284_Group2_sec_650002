@@ -16,6 +16,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -80,6 +86,48 @@ public class ExcelFileController {
 		return false;
 	}
 
+	public boolean writeExcelFile() {
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		int opt = chooser.showSaveDialog(null);
+		
+		if(opt == JFileChooser.APPROVE_OPTION) {
+			
+			File file= chooser.getSelectedFile();
+			if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("xls")) {
+			    // filename is OK as-is
+			} else {
+			    file = new File(file.toString() + ".xls");  
+			    file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName())+".xls");
+			}
+			
+			
+			try {
+				WritableWorkbook writaWB = Workbook.createWorkbook(file);
+				WritableSheet writableSheet = writaWB.createSheet("Grade", 0);
+				
+				for (int i =0 ; i < StudentArray.size() ;i++) {
+					Label label = new Label(0, i, StudentArray.get(i).getCode());
+					Label label2 = new Label(1,i, StudentArray.get(i).getGrade());
+					writableSheet.addCell(label);
+					writableSheet.addCell(label2);
+				}
+				
+				writaWB.write();
+				writaWB.close();
+				return true;
+			} catch (IOException | WriteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		return false;
+		
+	}
+	
+	
+	
 	public void setFileLabel() {
 
 	}
