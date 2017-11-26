@@ -176,7 +176,7 @@ public class LoginFrame extends javax.swing.JFrame {
         
         if(dbc.login(userTf.getText(), PasswordField.getText())){
             
-            new CourseFrame(dbc.getfName(),dbc.getLName(),dbc.getCourse(),dbc.getSection());
+            new CourseFrame(dbc.getfName(),dbc.getLName(),dbc.getCourse(),dbc.getSection(),dbc.getUser());
             this.dispose();
         }
         

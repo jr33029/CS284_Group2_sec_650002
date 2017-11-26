@@ -8,6 +8,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JButton;
@@ -22,6 +26,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.FileChooserUI;
+
+import org.apache.commons.io.FilenameUtils;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -59,7 +66,7 @@ public class CourseFrame extends JFrame {
 	// Array of Student
 	
 
-	public CourseFrame(String fName ,String lName ,String subject ,String section) {
+	public CourseFrame(String fName ,String lName ,String subject ,String section, String user) {
         this.setPreferredSize(new Dimension(800, 700));        
 		this.bllayout = new BorderLayout();
 		// TODO Auto-generated constructor stub
@@ -72,9 +79,12 @@ public class CourseFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-                                
-                                
-                                
+                             /* if(tab !=null && StudentArray !=null) {
+                            	  tab.removeAll();  
+                            	  StudentArray.clear();  
+                            	  stpanel.removeAll();
+                              }*/
+                              
                                 
                               if( controller.readExcelFile(selectFileLabel)){
                                   StudentArray = controller.getStudentArray();
@@ -115,7 +125,7 @@ public class CourseFrame extends JFrame {
 			}
 		});
 
-               logutMenu.addActionListener(new ActionListener() {
+        logutMenu.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         LoginFrame loginFrame = new LoginFrame();
@@ -125,7 +135,46 @@ public class CourseFrame extends JFrame {
                        
                     }
                 });
-                
+
+         
+        saveMenu.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JFileChooser chooser = new JFileChooser();
+				int opt = chooser.showSaveDialog(null);
+				if (opt == JFileChooser.APPROVE_OPTION) {
+					
+					File file = chooser.getSelectedFile();
+					if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase(user)) {
+						// filename is OK as-is
+					} else {
+						file = new File(file.toString() + "."+user);
+						file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName()) + "."+user);
+					}
+					
+					try {
+						FileOutputStream fo = new FileOutputStream(file);
+						ObjectOutputStream oos = new ObjectOutputStream(fo);
+						
+						oos.writeUTF(user);
+						oos.writeObject(StudentArray);
+						oos.writeObject(tab);
+						
+						oos.close();
+						fo.close();
+						
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				}
+			}
+		});
+        
+               
                 
 		fileMenu.add(exportMenu);
                 fileMenu.addSeparator();
@@ -210,7 +259,7 @@ public class CourseFrame extends JFrame {
 			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
 					ex);
 		}
-            CourseFrame courseFrame = new CourseFrame("test","test","test","test");
+            CourseFrame courseFrame = new CourseFrame("test","test","test","test","user");
           
 	}
 }

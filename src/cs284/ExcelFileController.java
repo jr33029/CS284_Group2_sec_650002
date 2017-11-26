@@ -48,32 +48,32 @@ public class ExcelFileController {
 			 * { JOptionPane.showMessageDialog(null, "Please Select file"); opt =
 			 * chooser.showOpenDialog(null); }
 			 */
-			String fName = chooser.getSelectedFile().getPath();
-			selectedFile = new File(fName);
-			selectFileLabel.setText("File Name: " + selectedFile.getName());
-			System.out.println("j");
-			
-			
-			Workbook workbook = Workbook.getWorkbook(new java.io.File(fName));
-			Sheet ws1 = workbook.getSheet(0);
-			int numOfColumn = ws1.getColumns();
-			int numOfRow = ws1.getRows();
-			String pattern = "[0-9]{10}";
-			for (int i = 7; i < numOfRow ; i++) {
-				/*if (!ws1.getCell(1, i).getContents().matches(pattern)) {
-					throw new NumberFormatException();
-				}*/
-				
-				
-				StudentArray.add(new Student(ws1.getCell(1, i).getContents(), ws1.getCell(2, i).getContents(),
-						ws1.getCell(3, i).getContents()));
+			if (opt == JFileChooser.APPROVE_OPTION) {
+				String fName = chooser.getSelectedFile().getPath();
+				selectedFile = new File(fName);
+				selectFileLabel.setText("File Name: " + selectedFile.getName());
+				System.out.println("j");
 
+				Workbook workbook = Workbook.getWorkbook(new java.io.File(fName));
+				Sheet ws1 = workbook.getSheet(0);
+				int numOfColumn = ws1.getColumns();
+				int numOfRow = ws1.getRows();
+				String pattern = "[0-9]{10}";
+				for (int i = 7; i < numOfRow; i++) {
+					/*
+					 * if (!ws1.getCell(1, i).getContents().matches(pattern)) { throw new
+					 * NumberFormatException(); }
+					 */
+
+					StudentArray.add(new Student(ws1.getCell(1, i).getContents(), ws1.getCell(2, i).getContents(),
+							ws1.getCell(3, i).getContents()));
+
+				}
+				workbook.close();
+				System.out.println("Read Sucess");
+				JOptionPane.showMessageDialog(null, "Read Sucess");
+				return true;
 			}
-			workbook.close();
-			System.out.println("Read Sucess");
-			JOptionPane.showMessageDialog(null, "Read Sucess");
-			return true;
-
 		} catch (HeadlessException | IOException | IndexOutOfBoundsException | BiffException ex) {
 			// TODO Auto-generated catch block
 			ex.printStackTrace();
@@ -89,29 +89,28 @@ public class ExcelFileController {
 	public boolean writeExcelFile() {
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		int opt = chooser.showSaveDialog(null);
-		
-		if(opt == JFileChooser.APPROVE_OPTION) {
-			
-			File file= chooser.getSelectedFile();
+
+		if (opt == JFileChooser.APPROVE_OPTION) {
+
+			File file = chooser.getSelectedFile();
 			if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("xls")) {
-			    // filename is OK as-is
+				// filename is OK as-is
 			} else {
-			    file = new File(file.toString() + ".xls");  
-			    file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName())+".xls");
+				file = new File(file.toString() + ".xls");
+				file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName()) + ".xls");
 			}
-			
-			
+
 			try {
 				WritableWorkbook writaWB = Workbook.createWorkbook(file);
 				WritableSheet writableSheet = writaWB.createSheet("Grade", 0);
-				
-				for (int i =0 ; i < StudentArray.size() ;i++) {
+
+				for (int i = 0; i < StudentArray.size(); i++) {
 					Label label = new Label(0, i, StudentArray.get(i).getCode());
-					Label label2 = new Label(1,i, StudentArray.get(i).getGrade());
+					Label label2 = new Label(1, i, StudentArray.get(i).getGrade());
 					writableSheet.addCell(label);
 					writableSheet.addCell(label2);
 				}
-				
+
 				writaWB.write();
 				writaWB.close();
 				return true;
@@ -120,14 +119,11 @@ public class ExcelFileController {
 				e.printStackTrace();
 			}
 		}
-		
-		
+
 		return false;
-		
+
 	}
-	
-	
-	
+
 	public void setFileLabel() {
 
 	}
