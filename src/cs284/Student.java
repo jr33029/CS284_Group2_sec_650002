@@ -1,10 +1,22 @@
 package cs284;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Student {
+public class Student implements Serializable{
 	
-	private String name, type,grade;
+	
+
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+
+
+	private String name, type,grade, email;
 	
 	
 
@@ -120,6 +132,14 @@ public class Student {
 
 	public int size() {
 		return listOfScore.size();
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 }

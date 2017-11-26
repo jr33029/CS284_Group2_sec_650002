@@ -53,18 +53,21 @@ public class StudentPanel extends JPanel implements TableModelListener{
 		
 		// test
 		String[][] data = new String[arrayList.size()][100];
-		String[] head = new String[5];
+		String[] head = new String[6];
 		head[0] = "รหัสนักศึกษา";
 		head[1] = "ชื่อ-นามสกุล";
 		head[2] = "ภาควิชา";
 		head[3] = "สถานะการเรียน";
 		head[4] = "คะแนน";
+		head[5]	= "email Address";
+		
 		for (int i = 0; i < arrayList.size(); i++) {
 			data[i][0] = arrayList.get(i).getCode();
 			data[i][1] = arrayList.get(i).getName();
 			data[i][2] = arrayList.get(i).getType();
 			data[i][3] = "ศึกษาอยู่";
 			data[i][4] = "";
+			data[i][5]	= "";
 		}
 		this.setLayout(new BorderLayout());
 		table = new JTable(data, head);
@@ -206,7 +209,7 @@ public class StudentPanel extends JPanel implements TableModelListener{
 				System.out.println(table.getModel().getRowCount());
 				for (int i = 0; i < table.getModel().getRowCount(); i++) {
 					try {
-						
+							arrayList.get(i).setEmail((String) table.getModel().getValueAt(i, 5));
 							arrayList.get(i).set(numOfScorePanel,Double.parseDouble((String) table.getModel().getValueAt(i, 4)));
 						
 					}catch(IndexOutOfBoundsException ex) {

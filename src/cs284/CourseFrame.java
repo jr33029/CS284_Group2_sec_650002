@@ -8,10 +8,14 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JButton;
@@ -45,18 +49,24 @@ public class CourseFrame extends JFrame {
 	private Reader reader = new Reader();
 	private JMenuBar mBar = new JMenuBar();
 	private JMenu fileMenu = new JMenu("File");
+	private JMenu  mailMenu= new JMenu("Email");
+	
+	
 	private JMenuItem exportMenu = new JMenuItem("Export Excel(97-2003 *.xls) File");
 	private JMenuItem importMenu = new JMenuItem("Import Excel(97-2003 *.xls) File");
 	private JMenuItem openMenu = new JMenuItem("Open");
 	private JMenuItem saveMenu = new JMenuItem("Save As...");
         private JMenuItem logutMenu = new JMenuItem("Logout");
+        
+        private JMenuItem sendEmailMenuItem = new JMenuItem("Send Email");
+        
 	private BorderLayout bl = new BorderLayout();
 	private JMenuBar bar = new JMenuBar();
 	private File selectedFile;
 	private JLabel selectFileLabel = new JLabel("No File");
 	private BorderLayout bllayout;
 	ExcelFileController controller = new ExcelFileController();
-        private JTabbedPane tab = new JTabbedPane();
+        private MyTabbedPane tab  = new MyTabbedPane();
         private GradeCriteriaManager grademng;
         
 	public ArrayList<Student> getStudentArray() {
@@ -103,6 +113,9 @@ public class CourseFrame extends JFrame {
 		fileMenu.addSeparator();
 		fileMenu.add(importMenu);
 		bar.add(fileMenu);
+		mailMenu.add(sendEmailMenuItem);
+		bar.add(mailMenu);
+		
 		add(bar, BorderLayout.NORTH);
 		JPanel west = new JPanel();
 		west.setLayout(new GridLayout(3, 1));
@@ -136,6 +149,46 @@ public class CourseFrame extends JFrame {
                     }
                 });
 
+        
+        openMenu.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				JFileChooser chooser = new JFileChooser();
+				int opt = chooser.showOpenDialog(null);
+				if (opt == JFileChooser.APPROVE_OPTION) {
+					
+					File file = chooser.getSelectedFile();
+					try {
+						FileInputStream fi = new FileInputStream(file);
+						
+						ObjectInputStream ois = new ObjectInputStream(fi);
+						
+						if(ois.readUTF().equals(user)) {
+							try {
+								StudentArray =(ArrayList<Student>) ois.readObject();
+								tab =(MyTabbedPane) ois.readObject();
+							} catch (ClassNotFoundException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}else {
+							
+						}
+						
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					
+				}
+			}
+		});
+        
+        
          
         saveMenu.addActionListener(new ActionListener() {
 			
