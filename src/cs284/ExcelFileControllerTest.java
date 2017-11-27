@@ -1,30 +1,29 @@
 package cs284;
 
 import static org.junit.Assert.*;
+
+import javax.swing.JLabel;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-class ExamPointTest {
-	ExamPoint expoint;
+class ExcelFileControllerTest {
+	ExcelFileController e;
 
 	@Before
 	public void up() {
+		e = new ExcelFileController();
 	}
 
 	@After
 	public void down() {
+		e = null;
 	}
 
 	@Test
-	void test() {
-		expoint = new ExamPoint("n", 30, 20, 60);
-		boolean x = false;
-		if (10 == expoint.getExamPoint()) {
-			x = true;
-		}
-		assertTrue(x);
-		expoint = null;
+	void testOpenfile() {
+		assertTrue(e.readExcelFile(new JLabel("test")));
 	}
 
 }
