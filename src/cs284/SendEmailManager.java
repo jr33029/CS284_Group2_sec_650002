@@ -7,6 +7,7 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.net.ssl.SSLSession;
+import javax.security.auth.Subject;
 public class SendEmailManager {
 	private final String USER_NAME = "noreplycs284.650002.2";  // GMail user name (just the part before "@gmail.com")
     private final String PASSWORD = "CS284650002"; // GMail password
@@ -111,8 +112,52 @@ public class SendEmailManager {
                 message.addRecipient(Message.RecipientType.TO, toAddress);
             
             
-            message.setSubject("ª√–°“»º≈°“√»÷°…“");
-            message.setText("‡√’¬π§ÿ≥ : "+name+"\t"+ "√À— π—°»÷°…“ : " +ID +"\n" +"‰¥È‡°√¥ : "+grade +"\tCourse: " +course +"\tSectrion: "+section);
+            message.setSubject("‡πÅ‡∏à‡πâ‡∏á‡∏ú‡∏•‡∏Å‡∏≤‡∏£‡∏®‡∏∂‡∏Å‡∏©‡∏≤");
+            message.setText("‡πÄ‡∏£‡∏µ‡∏¢‡∏ô ‡∏Ñ‡∏∏‡∏ì: "+name+"\t"+ "‡∏£‡∏´‡∏±‡∏™‡∏ô‡∏±‡∏Å‡∏®‡∏∂‡∏Å‡∏©‡∏≤ : " +ID +"\n" +"‡∏Ñ‡∏∏‡∏ì‡πÑ‡∏î‡πâ‡πÄ‡∏Å‡∏£‡∏î  : "+grade +"\tCourse: " +course +"\tSectrion: "+section);
+            Transport transport = session.getTransport("smtp");
+            transport.connect(HOST, USER_NAME, PASSWORD);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+            return true;
+        }
+        catch (AddressException ae) {
+            ae.printStackTrace();
+            return false;
+        }
+        catch (MessagingException me) {
+            me.printStackTrace();
+            return false;
+        }
+        
+       
+    }
+    
+    public   boolean sendFromGMail(String to, String mailSubject, String body) {
+        Properties props = System.getProperties();
+        
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", HOST);
+        props.put("mail.smtp.user", USER_NAME);
+        props.put("mail.smtp.password", PASSWORD);
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+
+        Session session = Session.getDefaultInstance(props);
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+            message.setFrom(new InternetAddress(USER_NAME));
+            InternetAddress toAddress = new InternetAddress(to);
+
+            // To get the array of addresses
+           
+
+            
+                message.addRecipient(Message.RecipientType.TO, toAddress);
+            
+            
+            message.setSubject(mailSubject);
+            message.setText(body);
             Transport transport = session.getTransport("smtp");
             transport.connect(HOST, USER_NAME, PASSWORD);
             transport.sendMessage(message, message.getAllRecipients());
@@ -136,6 +181,6 @@ public class SendEmailManager {
     	String[] mail = {"pongzadenoza@gmail.com","pongzadenoza@gmail.com"};
     	SendEmailManager mailmng = new SendEmailManager("course1","section");
     	
-    	mailmng.sendFromGMail(mail, "ª√–°“»º≈°“√»÷°…“", "‡√’¬π§ÿ≥xxx\t √À— π—°»÷°…“ xxxx \n ‰¥È‡°√¥ : A");
+    	mailmng.sendFromGMail(mail, "ÔøΩÔøΩ–°ÔøΩ»º≈°ÔøΩÔøΩÔøΩ÷°ÔøΩÔøΩ", "ÔøΩÔøΩÔøΩ¬πÔøΩÿ≥xxx\t ÔøΩÔøΩÔøΩ π—°ÔøΩ÷°ÔøΩÔøΩ xxxx \n ÔøΩÔøΩÔøΩ√¥ : A");
 	}
 }
