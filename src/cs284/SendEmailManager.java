@@ -1,4 +1,7 @@
 package cs284;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 import javax.mail.*;
@@ -10,12 +13,32 @@ public class SendEmailManager {
     private final String HOST = "smtp.gmail.com";
     private String course ,section;
     
+    
+    
+    
+   
+    
+    
     public SendEmailManager(String course,String section) {
 		// TODO Auto-generated constructor stub
     	this.course = course;
     	this.section = section;
     	
 	}
+    
+    
+    
+    public static boolean CheckInternetConnection() {
+		try {
+			URL url = new URL("http://www.google.co.th/");
+			URLConnection conn = url.openConnection();
+			conn.connect();
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
+    
  
     public   boolean sendFromGMail(String[] to, String subject, String body) {
         Properties props = System.getProperties();
@@ -64,7 +87,7 @@ public class SendEmailManager {
     }
     
     
-    public   boolean sendFromGMail(String to, String subject, String body) {
+    public   boolean sendFromGMail(String to, String mailSubject, String name ,String ID ,String grade) {
         Properties props = System.getProperties();
         
         props.put("mail.smtp.starttls.enable", "true");
@@ -88,8 +111,8 @@ public class SendEmailManager {
                 message.addRecipient(Message.RecipientType.TO, toAddress);
             
             
-            message.setSubject(subject);
-            message.setText(body);
+            message.setSubject("ประกาศผลการศึกษา");
+            message.setText("เรียนคุณ : "+name+"\t"+ "รหัสนักศึกษา : " +ID +"\n" +"ได้เกรด : "+grade +"\tCourse: " +course +"\tSectrion: "+section);
             Transport transport = session.getTransport("smtp");
             transport.connect(HOST, USER_NAME, PASSWORD);
             transport.sendMessage(message, message.getAllRecipients());

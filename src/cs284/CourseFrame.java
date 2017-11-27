@@ -61,7 +61,7 @@ public class CourseFrame extends JFrame {
         private JMenuItem sendEmailMenuItem = new JMenuItem("Send Email");
         
 	private BorderLayout bl = new BorderLayout();
-	private JMenuBar bar = new JMenuBar();
+	
 	private File selectedFile;
 	private JLabel selectFileLabel = new JLabel("No File");
 	private BorderLayout bllayout;
@@ -108,15 +108,10 @@ public class CourseFrame extends JFrame {
 			}
 		});
 
-		fileMenu.add(openMenu);
-		fileMenu.add(saveMenu);
-		fileMenu.addSeparator();
-		fileMenu.add(importMenu);
-		bar.add(fileMenu);
-		mailMenu.add(sendEmailMenuItem);
-		bar.add(mailMenu);
+	
 		
-		add(bar, BorderLayout.NORTH);
+		
+		
 		JPanel west = new JPanel();
 		west.setLayout(new GridLayout(3, 1));
 		west.add(addraw = new JButton("Add Raw Score"));
@@ -227,12 +222,17 @@ public class CourseFrame extends JFrame {
 			}
 		});
         
-               
+    	fileMenu.add(openMenu);
+		fileMenu.add(saveMenu);
+		fileMenu.addSeparator();
+		fileMenu.add(importMenu);
+		mailMenu.add(sendEmailMenuItem);       
                 
 		fileMenu.add(exportMenu);
                 fileMenu.addSeparator();
                 fileMenu.add(logutMenu);
 		mBar.add(fileMenu);
+		mBar.add(mailMenu);
 		add(mBar, BorderLayout.NORTH);
 		add(cen);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

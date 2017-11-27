@@ -1,5 +1,8 @@
 package cs284;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -9,6 +12,10 @@ public class StdDiv {
 	double std = 0;
 	double size = 0;
 	ArrayList<Double> list;
+	
+	
+	
+	
 	
 	public StdDiv(ArrayList<Double> list) {
 		// TODO Auto-generated constructor stub
@@ -71,9 +78,9 @@ public class StdDiv {
 	public static void main(String[] args) {
 		
 		ArrayList<Double> testList = new ArrayList<>();
-		testList.add(30.0);
+		testList.add(0.0);
+		testList.add(10.0);
 		testList.add(20.0);
-		testList.add(40.0);
 		StdDiv test = new StdDiv(testList);
 		
 		System.out.println(testList);
