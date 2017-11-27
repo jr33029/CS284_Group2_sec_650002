@@ -17,7 +17,8 @@ public class SendEmailFrame extends javax.swing.JFrame {
      * Creates new form SendEmailFrame
      */
     public SendEmailFrame() {
-        initComponents();
+    	setLocationRelativeTo(getParent());
+    	initComponents();
     }
 
     /**

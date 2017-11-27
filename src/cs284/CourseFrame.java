@@ -18,6 +18,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import javax.mail.SendFailedException;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -59,6 +61,9 @@ public class CourseFrame extends JFrame {
         private JMenuItem logutMenu = new JMenuItem("Logout");
         
         private JMenuItem sendEmailMenuItem = new JMenuItem("Send Email");
+        private JMenuItem sendGradeMenuItem = new JMenuItem("Send Grade Email");
+        private JMenuItem sendStatisticMenuItem = new JMenuItem("Send Grade Statistic Email");
+        
         
 	private BorderLayout bl = new BorderLayout();
 	
@@ -76,7 +81,7 @@ public class CourseFrame extends JFrame {
 	// Array of Student
 	
 
-	public CourseFrame(String fName ,String lName ,String subject ,String section, String user) {
+	public CourseFrame(String fName ,String lName ,String course ,String section, String user) {
         this.setPreferredSize(new Dimension(800, 700));        
 		this.bllayout = new BorderLayout();
 		// TODO Auto-generated constructor stub
@@ -119,7 +124,7 @@ public class CourseFrame extends JFrame {
 		west.add(grade = new JButton("Grade"));
 		add(west, BorderLayout.WEST);
 		JPanel cen = new JPanel(new BorderLayout());  //ขยายแล้วตารางมันจะได้เต็มจอ
-                head = new JLabel("Hello "+ fName +" " + lName + "\n" + subject+ " " + section ,SwingConstants.CENTER);
+                head = new JLabel("Hello "+ fName +" " + lName + "\n" + course+ " " + section ,SwingConstants.CENTER);
                 head.setFont(new Font("Tahoma", Font.BOLD, 24));
 		cen.add(head);
                 
@@ -222,12 +227,78 @@ public class CourseFrame extends JFrame {
 			}
 		});
         
-    	fileMenu.add(openMenu);
-		fileMenu.add(saveMenu);
-		fileMenu.addSeparator();
+        
+        sendEmailMenuItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				SendEmailFrame f = new SendEmailFrame();
+				f.setVisible(true);
+			}
+		});
+        
+        sendStatisticMenuItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ArrayList<Double> ttscorelist = new ArrayList<>();
+				SendEmailManager mng = new SendEmailManager(course, section);
+				for (Student list : StudentArray) {
+					ttscorelist.add(list.getTotalPoint());
+				}
+				StdDiv cal = new StdDiv(ttscorelist);
+				try {
+					for (Student list : StudentArray) {
+						if(mng.sendStatisticFromGMail(list.getEmail(), list.getName(), list.getCode(), list.getTotalPoint(), cal.getMin(), cal.getMax(), cal.getMean(), cal.getDiv())) {
+							
+						}else {
+							
+								throw new SendFailedException("send failed");
+							
+						}
+					
+					}
+					JOptionPane.showMessageDialog(null, "Send Successed");
+				} catch (SendFailedException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, "send failed");
+				}
+			}
+		});
+        
+        sendGradeMenuItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				SendEmailManager mng = new SendEmailManager(course, section);
+				try {
+				for (Student student : StudentArray) {
+					if(mng.sendFromGMail(student.getEmail(),  student.getName(), student.getCode(), student.getGrade())) {
+						
+					}else {
+						throw new SendFailedException("send failed");
+						
+						
+					}
+				}
+				JOptionPane.showMessageDialog(null, "Send Successed");
+				}catch(SendFailedException ex) {
+					JOptionPane.showMessageDialog(null, "Error");
+				}
+			}
+		});
+        
+    	//fileMenu.add(openMenu);
+		//fileMenu.add(saveMenu);
+		//fileMenu.addSeparator();
 		fileMenu.add(importMenu);
-		mailMenu.add(sendEmailMenuItem);       
-                
+		mailMenu.add(sendEmailMenuItem);   
+		mailMenu.add(sendStatisticMenuItem);
+		sendGradeMenuItem.setToolTipText("Send Grade that calculated to all student registered in this class");
+        mailMenu.add(sendGradeMenuItem);        
 		fileMenu.add(exportMenu);
                 fileMenu.addSeparator();
                 fileMenu.add(logutMenu);
@@ -268,10 +339,14 @@ public class CourseFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				try {
 				stTpanel = new StudentPanelTotal(selectedFile, getStudentArray());
 				cen.removeAll();
 				cen.add(stTpanel.getPanel());
 				pack();
+				}catch(Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error");
+				}
 			}
 		});
 
@@ -280,12 +355,16 @@ public class CourseFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				try {
 				grademng = new GradeCriteriaManager(getStudentArray());
 				grademng.gradeRealize();
 				gpanel = new GradePanel(selectedFile, getStudentArray());
 				cen.removeAll();
 				cen.add(gpanel);
 				pack();
+				}catch(Exception ex) {
+					JOptionPane.showMessageDialog(null, "Error");
+				}
 			}
 		});
 

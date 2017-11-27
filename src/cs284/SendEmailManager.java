@@ -84,11 +84,15 @@ public class SendEmailManager {
             return false;
         }
         
+        
+        
+            
+        
        
     }
     
     
-    public   boolean sendFromGMail(String to, String mailSubject, String name ,String ID ,String grade) {
+    public   boolean sendFromGMail(String to,  String name ,String ID ,String grade) {
         Properties props = System.getProperties();
         
         props.put("mail.smtp.starttls.enable", "true");
@@ -113,7 +117,53 @@ public class SendEmailManager {
             
             
             message.setSubject("แจ้งผลการศึกษา");
-            message.setText("เรียน คุณ: "+name+"\t"+ "รหัสนักศึกษา : " +ID +"\n" +"คุณได้เกรด  : "+grade +"\tCourse: " +course +"\tSectrion: "+section);
+            message.setText("เรียน คุณ: "+name+"\t"+ "รหัสนักศึกษา : " +ID +"\n" +"คุณได้เกรด  : "+grade +"\tCourse: " +course +"\tSection: "+section);
+            Transport transport = session.getTransport("smtp");
+            transport.connect(HOST, USER_NAME, PASSWORD);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+            return true;
+        }
+        catch (AddressException ae) {
+            ae.printStackTrace();
+            return false;
+        }
+        catch (MessagingException me) {
+            me.printStackTrace();
+            return false;
+        }
+        
+       
+    }
+    
+    
+    public   boolean sendStatisticFromGMail(String to,  String name ,String ID ,Double ttScore ,Double min, Double max,Double mean,Double sd) {
+        Properties props = System.getProperties();
+        
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", HOST);
+        props.put("mail.smtp.user", USER_NAME);
+        props.put("mail.smtp.password", PASSWORD);
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+
+        Session session = Session.getDefaultInstance(props);
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+            message.setFrom(new InternetAddress(USER_NAME));
+            InternetAddress toAddress = new InternetAddress(to);
+
+            // To get the array of addresses
+           
+
+            
+                message.addRecipient(Message.RecipientType.TO, toAddress);
+            
+            
+            message.setSubject("แจ้งคะแนนสุทธิเพื่อการตัดสินใจ");
+            message.setText("เรียน คุณ: "+name+"\t"+ "รหัสนักศึกษา : " +ID +"\n"  +"Course: " +course +"\tSection: "+section+"\n"
+            +"คุณได้คะแนน  : "+ttScore +"\n"+"Min: "+min +"\tMax: "+max+"\n"+"Mean: "+mean+"\tStandard Division: "+sd);
             Transport transport = session.getTransport("smtp");
             transport.connect(HOST, USER_NAME, PASSWORD);
             transport.sendMessage(message, message.getAllRecipients());

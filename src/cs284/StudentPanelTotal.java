@@ -25,11 +25,11 @@ public class StudentPanelTotal {
 		JPanel panel = new JPanel(new BorderLayout());
 		String[][] data = new String[arrayList.size()][100];
 		String[] head = new String[5];
-		head[0] = "���ʹѡ�֡��";
-		head[1] = "����-���ʡ��";
-		head[2] = "�Ҥ�Ԫ�";
-		head[3] = "ʶҹС�����¹";
-		head[4] = "��ṹ���";
+		head[0] = "รหัสนักศึกษา";
+		head[1] = "ชื่อ-นามสกุล";
+		head[2] = "ภาควิชา";
+		head[3] = "สถานะการเรียน";
+		head[4] = "คะแนนสุทธิ";
 		for (int i = 0; i < arrayList.size(); i++) {
 			data[i][0] = arrayList.get(i).getCode();
 			data[i][1] = arrayList.get(i).getName();
