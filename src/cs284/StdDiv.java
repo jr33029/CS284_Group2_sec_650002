@@ -26,7 +26,7 @@ public class StdDiv {
 		}
 		
 		
-		return Math.sqrt(sum/list.size());
+		return Math.sqrt(sum/(list.size()-1));
 	}
 	
 	public double getMean(){
